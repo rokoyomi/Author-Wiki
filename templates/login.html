@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content-area">
+        <h1 class="heading">Login</h1>
+        <form action="/login" method="post" class="text">
+            {% with messages = get_flashed_messages() %}
+                {% for msg in messages %}
+                    <p>{{ msg }}</p>
+                {% endfor %}
+            {% endwith %}
+            <label>
+                <span>Email: </span>
+                <input type="text" name="email" placeholder="Name" required>
+            </label>
+            <label>
+                <span>Password: </span>
+                <input type="text" name="password" placeholder="Name" required>
+            </label>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+{% endblock %}

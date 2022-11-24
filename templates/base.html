@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %} {% endblock %} - WikiStory</title>
+</head>
+<body>
+    <div class="header">
+        <a href="{{ url_for('index') }}" class="heading header-item">WikiStory</a>
+        <nav>
+            <a href="#" class="header-item">About</a>
+        </nav>
+    </div>
+
+    <div class="cover"></div>
+
+    <div class="content-area sidebar">
+        <h1 class="heading">Author Information</h1>
+        <p class="text">Email: {{ author }}</p>
+        <p class="text">Name: {{ author }}</p>
+        <p class="text">Age: {{ author }}</p>
+        <p class="text">Pen Name: {{ author }}</p>
+    </div>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="footer">
+        <p class="text">20K-0324</p>
+        <p class="text">20K-0481</p>
+        <p class="text">20K-1063</p>
+    </div>
+</body>
+</html>

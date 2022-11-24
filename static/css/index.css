@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+
+    background: url(https://i0.wp.com/bdtechtalks.com/wp-content/uploads/2022/02/algorithm-formulation.jpg?ssl=1) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-size: medium;
+
+    width: 100vw;
+    max-width: 100%;
+}
+
+.heading {
+    margin: 0;
+    padding: 10px 0px;
+}
+.text {
+    margin: 0;
+    padding: 10px 0px;
+}
+
+.header {
+    background-color: rgb(30, 30, 40);
+    padding: 0px 10px;
+}
+.header .heading {
+    font-size: 1.9em;
+}
+
+.cover {
+    height: 10vh;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+}
+.content .heading {
+    font-size: 1.7em;
+    background-color: rgb(25, 166, 221);
+    padding-left: 5px;
+}
+.content .text {
+    padding-left: 5px;
+}
+
+.content-area {
+    background-color: rgb(50, 50, 60);
+    padding: 5px 10px;
+}
+
+input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* Not removed via appearance */
+    margin: 0;
+}
+
+.sorting-option-item span {
+    cursor: pointer;
+    /*border-radius: 0.2cm;*/
+    /*background-color: rgb(110, 200, 250);*/
+    background-color: rgb(70, 70, 90);
+    color: white;
+    padding: 10px;
+}
+
+.sorting-option-item input:checked + span {
+    /*background-color: orangered;*/
+    background-color: rgb(50, 50, 120);
+}
+
+.file-upload-btn img {
+    width: 40px;
+    height: 40px;
+}
+
+.file-upload-btn {
+    display: inline-block;
+    background-color: orangered;
+    height: 50px;
+    width: fit-content;
+    cursor: pointer;
+    border-radius: 0.2cm;
+    font-size: 1.5em;
+    padding: 5px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    color: white;
+}
+
+.file-upload-btn input {
+    display: none;
+}
+
+.run-algo-btn {
+    font-size: 1.3em;
+    border: none;
+    background-color: rgb(70, 70, 90);
+    color: white;
+    padding: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.run-algo-btn:focus {
+    background-color: rgb(60, 60, 80);
+}
