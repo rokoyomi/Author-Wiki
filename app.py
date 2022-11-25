@@ -114,9 +114,12 @@ def arc(story_id, arc_id):
     
     arc_appearances = query('appearance', ['arc_id'], [arc_id])
     _characters = [query('characters', ['id'], [appearance['character_id']], False) for appearance in arc_appearances]
-    
-    return render_template('elements/element_base.jinja', 
-        author=session['user'], element=a, appearances=join(arc_appearances, _characters)
+    _arc_locations = query('arc_occurs_in', ['arc_id'], [arc_id])
+    _locations = [query('location', ['id'], [_arc_location['location_id']], False) for _arc_location in _arc_locations]
+
+    return render_template('elements/arc.jinja', 
+        author=session['user'], element=a, appearances=join(arc_appearances, _characters),
+        locations=_locations
     )
 
 @app.route('/worlds/<int:world_id>')
@@ -140,7 +143,8 @@ def location(location_id):
         return 'Not Found', 404
     
     _child_loc = query('location', ['location_id'], [location_id])
-    _arcs = query('arc_occurs_in', ['location_id'], [location_id])
+    _location_arcs = query('arc_occurs_in', ['location_id'], [location_id])
+    _arcs = [query('arc', ['id'], [_location_arc['arc_id']], False) for _location_arc in _location_arcs]
 
     return render_template('elements/location.jinja',
         author=session['user'], element=_location, locations=_child_loc, arcs=_arcs

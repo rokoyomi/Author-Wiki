@@ -1,5 +1,5 @@
 link races to characters
-link arcs to character/location/item
+link arcs to item
 link item to world
 
 make input and edit forms

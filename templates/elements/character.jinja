@@ -31,11 +31,12 @@
     <div class="content-area">
         <h1 class="heading">Appearances</h1>
         {% for appearance in appearances %}
-        <div>
-            <a href="{{ url_for('story', story_id=appearance['story_id']) }}" class="heading-2">
-                {{ appearance['name'] }}
-            </a>
-            <span class="text">{{ appearance['role'] }}</span>
+        <div class="flex-area flex-align-center flex-justify-sp-bw">
+            <div>
+                <a href="{{ url_for('story', story_id=appearance['story_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
+                <span class="text">{{ appearance['role'] }}</span>
+            </div>
+            <a href="" class="item">Remove</a>
         </div>
         <p class="text">{{ appearance['role_description'] }}</p>
         {% endfor %}

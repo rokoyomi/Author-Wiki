@@ -1,0 +1,31 @@
+{% extends "elements/element_base.jinja" %}
+
+{% block content %}
+<div class="content-area">
+        <h1 class="heading">Characters</h1>
+        {% for appearance in appearances %}
+        <div class="flex-area flex-align-center flex-justify-sp-bw">
+            <div>
+                <a href="{{ url_for('character', character_id=appearance['character_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
+                <span class="text">{{ appearance['role'] }}</span>
+            </div>
+            <a href="" class="item">Remove</a>
+        </div>
+        <p class="text">{{ appearance['role_description'] }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Locations involved in the Arc</h1>
+        {% for location in locations %}
+        <div class="flex-area flex-align-center flex-justify-sp-bw">
+            <div>
+                <a href="{{ url_for('location', location_id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
+                <span class="text">{{ location['category'] }}</span>
+            </div>
+            <a href="" class="item">Remove</a>
+        </div>
+        <p class="text">{{ location['description'] }}</p>
+        {% endfor %}
+    </div>
+{% endblock content %}
