@@ -1,12 +1,12 @@
-
-forms
-make delete and edit buttons do something
-replace dummy queries with actual db queries
-link races to characters and worlds
-a page for arcs
-link arcs to location/item/story
+link races to characters
+link arcs to character/location/item
 link item to world
-link races to worlds
 
+make input and edit forms
+make add/delete/edit buttons work
+
+replace dummy queries with actual db queries
 updates should cascade
-deletes should set default
+deletes should set default (mostly)
+
+optionally remove story_id from the arc links
