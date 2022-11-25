@@ -139,8 +139,10 @@ def location(location_id):
     if _location == None:
         return 'Not Found', 404
     
-    return render_template('elements/element_base.jinja',
-        author=session['user'], element=_location
+    _child_loc = query('location', ['location_id'], [location_id])
+
+    return render_template('elements/location.jinja',
+        author=session['user'], element=_location, locations=_child_loc
     )
 
 @app.route('/races/<int:race_id>')
