@@ -20,11 +20,13 @@ stories = [
 
 arcs = [
     {
+        'id':1,
         'story_id':1,
         'name':'Soul Society Arc',
         'description':'Ichigo goes to soul society, beats up Byakuya, gets thoroughly beat up by Aizen'
     },
     {
+        'id':2,
         'story_id':1,
         'name':'Huecomundo Arc',
         'description':'Ichigo goes to Huecomundo, beats up a bunch of Espada'
@@ -178,15 +180,13 @@ organizations = [
 character_appears_in = [
     {
         'character_id':1,
-        'story_id':1,
-        'arc_name':'Soul Society Arc',
+        'arc_id':1,
         'role':'Minor Antagonist',
         'role_description': "Yamamoto is the pillar of Soul Society. When Ichigo and friends attack, he gives the command to hunt them down. But he ultimately plays no significant role"
     },
     {
         'character_id':2,
-        'story_id':1,
-        'arc_name':'Soul Society Arc',
+        'arc_id':1,
         'role':'Protagonist',
         'role_description': 'Ichigo and Friends invade the Soul Society to save Rukia.'
     },
@@ -202,6 +202,10 @@ item_featured_in = [
 arc_occurs_in = [
     {
         'arc_id':1,
+        'location_id':3,
+    },
+    {
+        'arc_id':2,
         'location_id':2,
     }
 ]
@@ -235,6 +239,7 @@ mapper = {
     'item_featured_in':item_featured_in,
     'appearance':character_appears_in,
     'race_lives_in':race_lives_in,
+    'arc_occurs_in':arc_occurs_in,
 }
 
 def query(_from, _col, _val, _aslist=True):

@@ -86,7 +86,7 @@ def character(character_id: int):
     traits= query('traits', ['character_id'], [character_id])
     arc_appearances = query('appearance', ['character_id'], [character_id])
     print(arc_appearances)
-    _arcs = [query('arc', ['story_id', 'name'], [appearance['story_id'], appearance['arc_name']], False) for appearance in arc_appearances]
+    _arcs = [query('arc', ['id'], [appearance['arc_id']], False) for appearance in arc_appearances]
 
     return render_template('elements/character.jinja', 
         author= session['user'], element=_character,
@@ -106,17 +106,17 @@ def story(story_id):
         author=session['user'], element=s, arcs=arcs
     )
 
-@app.route('/stories/<int:story_id>/arcs/<arc_name>')
-def arc(story_id, arc_name):
-    a = query('arc', ['story_id', 'name'], [story_id, arc_name], False)
+@app.route('/stories/<int:story_id>/arcs/<int:arc_id>')
+def arc(story_id, arc_id):
+    a = query('arc', ['id'], [arc_id], False)
     if a == None:
         return 'Not Found',404
     
-    s_appearances = query('appearance', ['story_id','name'], [story_id, arc_name])
-    c_appearances = [query('characters', ['id'], [appearance['character_id']], False) for appearance in s_appearances]
+    arc_appearances = query('appearance', ['arc_id'], [arc_id])
+    _characters = [query('characters', ['id'], [appearance['character_id']], False) for appearance in arc_appearances]
     
     return render_template('elements/element_base.jinja', 
-        author=session['user'], element=a, appearances=join(s_appearances, c_appearances)
+        author=session['user'], element=a, appearances=join(arc_appearances, _characters)
     )
 
 @app.route('/worlds/<int:world_id>')
@@ -140,9 +140,10 @@ def location(location_id):
         return 'Not Found', 404
     
     _child_loc = query('location', ['location_id'], [location_id])
+    _arcs = query('arc_occurs_in', ['location_id'], [location_id])
 
     return render_template('elements/location.jinja',
-        author=session['user'], element=_location, locations=_child_loc
+        author=session['user'], element=_location, locations=_child_loc, arcs=_arcs
     )
 
 @app.route('/races/<int:race_id>')
