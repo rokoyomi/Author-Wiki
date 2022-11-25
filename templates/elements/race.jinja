@@ -1,0 +1,16 @@
+{% extends "elements/element_base.jinja" %}
+
+{% block content %}
+    <div class="content-area">
+        <h1 class="heading">Inhabited Worlds</h1>
+        {% for world in worlds %}
+            <div class="flex-area flex-align-center flex-justify-sp-bw">
+                <div>
+                    <a href="{{ url_for('world', world_id=world['id']) }}" class="heading-2">{{ world['name'] }}</a>
+                </div>
+                <a href="" class="item">Remove</a>
+            </div>
+            <p class="text">{{ world['description'] }}</p>
+        {% endfor %}
+    </div>
+{% endblock content %}

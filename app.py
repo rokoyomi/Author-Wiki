@@ -151,8 +151,11 @@ def race(race_id):
     if _race == None:
         return 'Not Found', 404
     
-    return render_template('elements/element_base.jinja',
-        author=session['user'], element=_race
+    _race_worlds = query('race_lives_in', ['race_id'], [race_id])
+    _worlds = [query('world', ['id'], [_race_world['world_id']], False) for _race_world in _race_worlds]
+
+    return render_template('elements/race.jinja',
+        author=session['user'], element=_race, worlds=_worlds
     )
 
 @app.route('/items/<int:item_id>')
