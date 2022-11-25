@@ -84,12 +84,13 @@ def character(character_id: int):
         return 'Not Found',404
 
     traits= query('traits', ['character_id'], [character_id])
-    appearances = query('appearance', ['character_id'], [character_id])
-    s_appearances = [query('story', ['id'], [appearance['story_id']], False) for appearance in appearances]
+    arc_appearances = query('appearance', ['character_id'], [character_id])
+    print(arc_appearances)
+    _arcs = [query('arc', ['story_id', 'name'], [appearance['story_id'], appearance['arc_name']], False) for appearance in arc_appearances]
 
     return render_template('elements/character.jinja', 
         author= session['user'], element=_character,
-        traits=traits, appearances=join(s_appearances, appearances)
+        traits=traits, appearances=join(_arcs, arc_appearances)
     )
 
 @app.route('/stories/<int:story_id>')
@@ -100,11 +101,9 @@ def story(story_id):
         return 'Not Found',404
 
     arcs = query('arc', ['story_id'], [story_id])
-    s_appearances = query('appearance', ['story_id'], [story_id])
-    c_appearances = [query('characters', ['id'], [appearance['character_id']], False) for appearance in s_appearances]
 
     return render_template('elements/story.jinja', 
-        author=session['user'], element=s, arcs=arcs, appearances=join(s_appearances, c_appearances)
+        author=session['user'], element=s, arcs=arcs
     )
 
 @app.route('/stories/<int:story_id>/arcs/<arc_name>')
@@ -113,8 +112,11 @@ def arc(story_id, arc_name):
     if a == None:
         return 'Not Found',404
     
+    s_appearances = query('appearance', ['story_id','name'], [story_id, arc_name])
+    c_appearances = [query('characters', ['id'], [appearance['character_id']], False) for appearance in s_appearances]
+    
     return render_template('elements/element_base.jinja', 
-        author=session['user'], element=a
+        author=session['user'], element=a, appearances=join(s_appearances, c_appearances)
     )
 
 @app.route('/worlds/<int:world_id>')
@@ -124,9 +126,11 @@ def world(world_id):
         return 'Not Found',404
 
     _locations = query('location', ['world_id'], [world_id])
+    _races_worlds = query('race_lives_in', ['world_id'], [world_id])
+    _races = [query('race', ['id'], [_race_world['race_id']], False) for _race_world in _races_worlds]
 
     return render_template('elements/world.jinja', 
-        author=session['user'], element=_world, locations=_locations
+        author=session['user'], element=_world, locations=_locations, races=join(_races_worlds, _races)
     )
 
 @app.route('/locations/<int:location_id>')

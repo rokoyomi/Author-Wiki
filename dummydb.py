@@ -1,4 +1,4 @@
-author_list = [
+authors = [
     {
         'id':1,                     # pk
         #'first_name':'tite',
@@ -9,7 +9,7 @@ author_list = [
     }
 ]
 
-story_list = [
+stories = [
     {
         'id':1,             # pk
         'author_id':1,      # fk, not null
@@ -18,29 +18,7 @@ story_list = [
     },
 ]
 
-story_genre_list = [
-    {
-        'story_id':1, # composite pk
-        'genre_id':1  # composite pk
-    },
-]
-
-genre_list = [
-    {
-        'id':1,             # pk
-        'name':'Action',    # not null
-    },
-    {
-        'id':2,
-        'name':'Comedy',
-    },
-    {
-        'id':2,
-        'name':'Shounen',
-    },
-]
-
-arc_list = [
+arcs = [
     {
         'story_id':1,
         'name':'Soul Society Arc',
@@ -53,17 +31,17 @@ arc_list = [
     },
 ]
 
-character_list = [
+characters = [
     {
         'id':1,
         'author_id':1,
-        'name':'Mysterious Girl with a Book',
-        'gender':'Female',
-        'height':160,
+        'name':'Shigekuni Genryuusai Yamamoto',
+        'gender':'Male',
+        'height':None,
         'weight':None,
-        'age':None,
-        'alignment':None,
-        'description':'A mysterious girl sometimes seen in the labyrinth of knowledge, huddled in a corner and reading intently... '
+        'age':2000,
+        'alignment':'Lawful-Good',
+        'description':'The Captain Commander of the 13 Court Guard Squads, the oldest and stronget of the Soul Reapers.'
     },
     {
         'id':2,
@@ -72,35 +50,38 @@ character_list = [
         'gender':'Male',
         'height':None,
         'weight':None,
-        'age':None,
-        'alignment':None,
+        'age':17,
+        'alignment':'Lawful-Good',
         'description':"You know who Ichigo is, I'm not gonna type all that."
     },
 ]
 
-traits_list = [
-    {
-        'character_id':1,
-        'name':'Personality',
-        'description':'Unkown. All attempts at making contact have thus failed. The kid ignores everyone and anyone that attempts to get too close immediately collapses from "feelings of overwhelming dread".'
-    },
-    {
-        'character_id':1,
-        'name':'Appearance',
-        'description':'She is short, looking to be in her early teens, with long blonde hair, and seemingly crimson red eyes--although no one has yet gotten near enough to be sure.'
-    },
+traits = [
+    
 ]
 
-world_list = [
+worlds = [
     {
         'id':1,
         'author_id':1,
         'name':'World of the Living',
-        'description':'Where the living dwell'
+        'description':'Modern day earth.'
+    },
+    {
+        'id':2,
+        'author_id':1,
+        'name':'Huecomundo',
+        'description':'A desolate wasteland which the hollows call home.'
+    },
+    {
+        'id':3,
+        'author_id':1,
+        'name':'Soul Society',
+        'description':'Where the souls of the dead, and the soul reapers reside.'
     },
 ]
 
-location_list = [
+locations = [
     {
         'id':1,
         'author_id':1,
@@ -119,18 +100,39 @@ location_list = [
         'name':'Karakura School',
         'description':'The school Ichigo goes to.'
     },
-]
-
-race_list = [
     {
-        'id':1,
+        'id':3,
         'author_id':1,
-        'name':'human',
-        'description':'Standard humans, not much different from the humanity of our world.'
+        'world_id':3,
+        'location_id':None,
+        'category':'City',
+        'name':'Sereitei',
+        'description':'The home of the Soul Reapers.'
     },
 ]
 
-item_list = [
+races = [
+    {
+        'id':1,
+        'author_id':1,
+        'name':'Human',
+        'description':'Normal humans, no different from the humanity of our world.'
+    },
+    {
+        'id':2,
+        'author_id':1,
+        'name':'Hollows',
+        'description':'Lost souls with lingering regrets that were unable to move on.'
+    },
+    {
+        'id':3,
+        'author_id':1,
+        'name':'Soul Reapers',
+        'description':'Responsible for maintaining the balance of souls in the three realms.'
+    },
+]
+
+items = [
     {
         'id':1,
         'author_id':1,
@@ -165,29 +167,74 @@ item_list = [
     },
 ]
 
-appearance_list = [
+organizations = [
+    {
+        'id':1,
+        'leader_id':1,
+        'name': '13 Court Guard Squads',
+    }
+]
+
+character_appears_in = [
+    {
+        'character_id':1,
+        'story_id':1,
+        'arc_name':'Soul Society Arc',
+        'role':'Minor Antagonist',
+        'role_description': "Yamamoto is the pillar of Soul Society. When Ichigo and friends attack, he gives the command to hunt them down. But he ultimately plays no significant role"
+    },
     {
         'character_id':2,
         'story_id':1,
+        'arc_name':'Soul Society Arc',
         'role':'Protagonist',
-        'role_description': 'Ichigo is the primary main character of this story.'
+        'role_description': 'Ichigo and Friends invade the Soul Society to save Rukia.'
+    },
+]
+
+item_featured_in = [
+    {
+        'item_id':3,
+        'arc_id':1,
+    }
+]
+
+arc_occurs_in = [
+    {
+        'arc_id':1,
+        'location_id':2,
+    }
+]
+
+race_lives_in = [
+    {
+        'race_id':1,
+        'world_id':1,
+    },
+    {
+        'race_id':2,
+        'world_id':2,
+    },
+    {
+        'race_id':3,
+        'world_id':3,
     },
 ]
 
 # ignore this
 mapper = {
-    'author':author_list,
-    'story':story_list,
-    'arc':arc_list,
-    'world':world_list,
-    'characters':character_list,
-    'traits':traits_list,
-    'location':location_list,
-    'race':race_list,
-    'item':item_list,
-    'appearance':appearance_list,
-    'genre':genre_list,
-    'story_genre':story_genre_list,
+    'author':authors,
+    'story':stories,
+    'arc':arcs,
+    'world':worlds,
+    'characters':characters,
+    'traits':traits,
+    'location':locations,
+    'race':races,
+    'item':items,
+    'item_featured_in':item_featured_in,
+    'appearance':character_appears_in,
+    'race_lives_in':race_lives_in,
 }
 
 def query(_from, _col, _val, _aslist=True):

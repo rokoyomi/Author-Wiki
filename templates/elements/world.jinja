@@ -14,4 +14,17 @@
             <p class="text">{{ location['description'] }}</p>
         {% endfor %}
     </div>
+    <div class="content-area">
+        <h1 class="heading">Notable Races</h1>
+        {% for race in races %}
+            <div class="flex-area flex-align-center flex-justify-sp-bw">
+                <div>
+                    <a href="{{ url_for('race', race_id=race['id']) }}" class="heading-2">{{ race['name'] }}</a>
+                    {#<span class="text">{{ race['category'] }}</span>#}
+                </div>
+                <a href="" class="item">Remove</a>
+            </div>
+            <p class="text">{{ race['description'] }}</p>
+        {% endfor %}
+    </div>
 {% endblock content %}
