@@ -87,10 +87,11 @@ def character(character_id: int):
     arc_appearances = query('appearance', ['character_id'], [character_id])
     print(arc_appearances)
     _arcs = [query('arc', ['id'], [appearance['arc_id']], False) for appearance in arc_appearances]
+    _race = query('race', ['id'], [_character['race_id']], False)
 
     return render_template('elements/character.jinja', 
         author= session['user'], element=_character,
-        traits=traits, appearances=join(_arcs, arc_appearances)
+        traits=traits, appearances=join(_arcs, arc_appearances), race=_race
     )
 
 @app.route('/stories/<int:story_id>')
@@ -158,9 +159,10 @@ def race(race_id):
     
     _race_worlds = query('race_lives_in', ['race_id'], [race_id])
     _worlds = [query('world', ['id'], [_race_world['world_id']], False) for _race_world in _race_worlds]
+    _characters = query('characters', ['race_id'], [race_id])
 
     return render_template('elements/race.jinja',
-        author=session['user'], element=_race, worlds=_worlds
+        author=session['user'], element=_race, worlds=_worlds, characters=_characters
     )
 
 @app.route('/items/<int:item_id>')

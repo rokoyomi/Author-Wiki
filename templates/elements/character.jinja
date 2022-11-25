@@ -16,6 +16,13 @@
     </div>
 {% endblock %}#}
 
+{% block main_content_extension %}
+    <label class="flex-area flex-align-center">
+        <span class="text">Race: </span>
+        <a href="{{ url_for('race', race_id=race['id']) }}" class="text highlightable underlined">{{ race['name'] }}</a>
+    </label>
+{% endblock main_content_extension %}
+
 {% block content %}
     <div class="content-area">
         <h1 class="heading">Character Traits</h1>

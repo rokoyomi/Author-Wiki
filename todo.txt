@@ -1,6 +1,4 @@
-link races to characters
-link arcs to item
-link item to world
+link item to arc and world
 
 make input and edit forms
 make add/delete/edit buttons work

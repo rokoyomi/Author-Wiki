@@ -183,3 +183,9 @@ form label input {
 .flex-justify-sp-bw {
     justify-content: space-between;
 }
+.highlightable:hover {
+    color: orangered;
+}
+.underlined {
+    text-decoration: underline;
+}
