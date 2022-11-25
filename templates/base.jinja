@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="header">
-        <a href="{{ url_for('index') }}" class="heading header-item">WikiStory</a>
+        <a href="{{ url_for('login') }}" class="heading header-item">WikiStory</a>
         <nav>
             <a href="#" class="header-item">About</a>
         </nav>
@@ -17,13 +17,22 @@
 
     <div class="cover"></div>
 
+    <div class="main">
+        {% block main %}
+        {% endblock %}
+    </div>
+
+    {% if author %}
     <div class="content-area sidebar">
         <h1 class="heading">Author Information</h1>
-        <p class="text">Email: {{ author }}</p>
-        <p class="text">Name: {{ author }}</p>
-        <p class="text">Age: {{ author }}</p>
-        <p class="text">Pen Name: {{ author }}</p>
+        <p class="text">Email: {{ author['email'] }}</p>
+        <p class="text">Name: {{ author['name'] }}</p>
+        <p class="text">Pen Name: {{ author['pen_name'] }}</p>
+        <p class="list">
+            <a href="/logout" class="item">Logout</a>
+        </p>
     </div>
+    {% endif %}
 
     <div class="content">
         {% block content %}

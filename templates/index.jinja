@@ -1,0 +1,79 @@
+{% extends 'base.jinja' %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+    <div class="content-area">
+        <h1 class="heading">Welcome to WikiStory!</h1>
+        <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo est quis velit impedit eaque cupiditate culpa, repudiandae magni. Fuga laudantium hic quia! Id iusto officia animi voluptatibus impedit, eos delectus.</p>
+        <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium facere laudantium quos maiores non? Alias rerum itaque quos at, consequuntur autem placeat maiores. Magni hic assumenda aut cumque soluta ut?</p>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="content-area">
+        <h1 class="heading">Characters</h1>
+        <p class="text">All your characters are shown here</p>
+        <div class="list">
+            {% for character in characters_list %}
+            <a href="{{ url_for('character', character_id=character['id']) }}" class="item">{{ character['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='characters') }}" class="item">+</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Stories</h1>
+        <p class="text">All your stories are shown here</p>
+        <div class="list">
+            {% for story in stories %}
+            <a href="{{ url_for('story', story_id=story['id']) }}" class="item">{{ story['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='story') }}" class="item">+</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Worlds</h1>
+        <p class="text">All your worlds are shown here</p>
+        <div class="list">
+            {% for world in worlds %}
+            <a href="{{ url_for('world', world_id=world['id']) }}" class="item">{{ world['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='world') }}" class="item">+</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Locations</h1>
+        <p class="text">All your locations are shown here</p>
+        <div class="list">
+            {% for location in locations %}
+            <a href="{{ url_for('location', location_id=location['id']) }}" class="item">{{ location['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='location') }}" class="item">+</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Races</h1>
+        <p class="text">All your races are shown here</p>
+        <div class="list">
+            {% for race in races %}
+            <a href="{{ url_for('race', race_id=race['id']) }}" class="item">{{ race['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='race') }}" class="item">+</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Items</h1>
+        <p class="text">All your items are shown here</p>
+        <div class="list">
+            {% for item in items %}
+            <a href="{{ url_for('item', item_id=item['id']) }}" class="item">{{ item['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='item') }}" class="item">+</a>
+        </div>
+    </div>
+{% endblock %}

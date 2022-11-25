@@ -1,0 +1,44 @@
+{% extends 'elements/element_base.jinja' %}
+
+{% block title %} {{ element['name'] }} {% endblock %}
+
+{#{% block main %}
+    <div class="content-area">
+        <h1 class="heading">Story Details</h1>
+        <p class="heading-2">{{ element['name'] }}</p>
+        <p class="text">{{ element['description'] }}</p>
+    </div>
+{% endblock %}#}
+
+{% block content %}
+    <div class="content-area">
+        <h1 class="heading">Arcs</h1>
+        {% for arc in arcs %}
+        <div class="flex-area flex-align-center flex-justify-sp-bw">
+            <div>
+                <a href="{{ url_for('arc', story_id=element['id'], arc_name=arc['name']) }}" class="heading-2">{{ arc['name'] }}</a>
+                <p class="text">{{ arc['description'] }}</p>
+            </div>
+            <a href="" class="item">Remove</a>
+        </div>
+        {% endfor %}
+        <div class="list">
+            <a href="" class="item">+ Add Arc</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Characters</h1>
+        {% for appearance in appearances %}
+        <div class="flex-area flex-align-center flex-justify-sp-bw">
+            <div>
+                <a href="{{ url_for('character', character_id=appearance['character_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
+                <span class="text">{{ appearance['role'] }}</span>
+            </div>
+            <a href="" class="item">Remove</a>
+        </div>
+        <p class="text">{{ appearance['role_description'] }}</p>
+        {% endfor %}
+    </div>
+{% endblock content %}
+

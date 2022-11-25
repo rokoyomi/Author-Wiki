@@ -1,0 +1,18 @@
+{% extends 'base.jinja' %}
+
+{% block main %}
+<div class="content-area">
+    <h1 class="heading">Form</h1>
+    <form action="" class="text">
+        {% for element in elements %}
+        <label>
+            <span>{{ element['COLUMN_NAME'] }}: </span>
+            <input type="text" name="{{ element['COLUMN_NAME'] }}" id="">
+        </label><br>
+        {% endfor %}
+        <p class="list">
+            <input type="submit" value="Add" class="item">
+        </p>
+    </form>
+</div>
+{% endblock %}

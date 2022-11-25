@@ -2,12 +2,13 @@ body {
     width: 100vw;
     max-width: 100%;
     display: grid;
-    grid-template-columns: 4fr 1fr;
+    grid-template-columns: 0.5fr 2fr 2fr 2fr 2fr 0.5fr;
     grid-template-areas: 
-        "header header header header"
-        "cover cover cover cover"
-        "main main main sidebar"
-        "footer footer footer footer"
+        "header header  header  header  header  header"
+        "cover  cover   cover   cover   cover   cover"
+        ".      main    main    main    sidebar ."
+        ".      content content content content ."
+        "footer footer  footer  footer  footer  footer"
     ;
     gap: 10px;
 
@@ -31,6 +32,19 @@ body {
     color: white;
     padding: 5px;
     cursor: pointer;
+    font-size: 1.7em;
+    margin: 5px 0px;
+}
+.heading-2 {
+    color: white;
+    padding: 5px;
+    font-size: 1.5em;
+    margin: 5px 0px;
+    text-decoration: none;
+    cursor: pointer;
+}
+.heading-2:hover {
+    color: orangered;
 }
 
 .header {
@@ -46,17 +60,26 @@ body {
     height: 20vh;
 }
 
-.content {
+.main {
     grid-area: main;
+    display: flex;
+    gap: 5;
+    width: 100%;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    width: 100%;
+}
+
+.content {
+    grid-area: content;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
     gap: 5px;
-}
-
-.sidebar {
-    grid-area: sidebar;
+    width: 100%;
 }
 
 .footer {
@@ -66,9 +89,6 @@ body {
     justify-content: center;
     align-items: center;
     gap: 10px;
-
-    /*position: absolute;
-    bottom: 0;*/
     width: 100%;
 }
 .footer .text {
@@ -92,22 +112,23 @@ body {
 
 .header .heading {
     font-size: 1.9em;
+    margin: 0px;
 }
 
 .content-area {
     padding-left: 5px;
     background-color: rgb(50, 50, 60);
+    width: 100%;
 }
 
 .content-area .heading {
     background-color: rgb(25, 166, 221);
-    margin: 5px 0px;
 }
 
 .list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 5px;
     margin: 10px 0px;
 }
 .item {
@@ -116,7 +137,49 @@ body {
     padding: 10px;
     text-decoration: none;
     color: white;
+    margin: 5px;
 }
 .item:hover {
     background-color: orangered;
+    cursor: pointer ;
+}
+
+form label {
+    display: block;
+}
+
+form label span {
+    display: block;
+    padding: 5px;
+}
+
+form label input {
+    padding: 5px;
+    background-color: rgb(50, 50, 60);
+    color: white;
+    border: thin solid white;
+}
+
+.form-input {
+    padding: 5px;
+    background-color: rgb(50, 50, 60);
+    color: white;
+    border: thin solid white;
+}
+
+.flex-area {
+    display: flex;
+    gap: 5px;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.flex-vertical {
+    flex-direction: column;
+}
+.flex-align-center {
+    align-items: center;
+}
+.flex-justify-sp-bw {
+    justify-content: space-between;
 }

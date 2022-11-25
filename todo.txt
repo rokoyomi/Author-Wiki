@@ -1,0 +1,12 @@
+
+forms
+make delete and edit buttons do something
+replace dummy queries with actual db queries
+link races to characters and worlds
+a page for arcs
+link arcs to location/item/story
+link item to world
+link races to worlds
+
+updates should cascade
+deletes should set default

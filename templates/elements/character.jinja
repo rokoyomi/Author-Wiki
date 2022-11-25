@@ -1,0 +1,43 @@
+{% extends 'elements/element_base.jinja' %}
+
+{% block title %} {{ element['name'] }} {% endblock %}
+
+{#{% block main %}
+    <div class="content-area">
+        <h1 class="heading">Character Details</h1>
+        <p class="heading-2">{{ element['name'] }}</p>
+        <p class="text">{{ element['description'] }}</p>
+        <p class="text">Gender: {{ element['gender'] }}</p>
+        <p class="text">Species: </p>
+        <p class="text">Height: {{ element['height'] }}cm</p>
+        <p class="text">Weight: {{ element['weight'] }}</p>
+        <p class="text">Age: {{ element['age'] }}</p>
+        <p class="text">Alignment: {{ element['alignment'] }}</p>
+    </div>
+{% endblock %}#}
+
+{% block content %}
+    <div class="content-area">
+        <h1 class="heading">Character Traits</h1>
+        {% for trait in traits %}
+        <p class="heading-2">{{ trait['name'] }}</p>
+        <p class="text">{{ trait['description'] }}</p>
+        {% endfor %}
+        <div class="list">
+            <a href="" class="item">+ Add Trait</a>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <h1 class="heading">Appearances</h1>
+        {% for appearance in appearances %}
+        <div>
+            <a href="{{ url_for('story', story_id=appearance['story_id']) }}" class="heading-2">
+                {{ appearance['name'] }}
+            </a>
+            <span class="text">{{ appearance['role'] }}</span>
+        </div>
+        <p class="text">{{ appearance['role_description'] }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'elements/element_base.jinja' %}
+
+{% block content %}
+    <div class="content-area">
+        <h1 class="heading">Notable Locations</h1>
+        {% for location in locations %}
+            <div class="flex-area flex-align-center flex-justify-sp-bw">
+                <div>
+                    <a href="{{ url_for('location', location_id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
+                    <span class="text">{{ location['category'] }}</span>
+                </div>
+                <a href="" class="item">Remove</a>
+            </div>
+            <p class="text">{{ location['description'] }}</p>
+        {% endfor %}
+    </div>
+{% endblock content %}

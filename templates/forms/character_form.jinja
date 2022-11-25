@@ -1,0 +1,45 @@
+{% extends 'base.jinja' %}
+
+{% block title %} Add Character {% endblock %}
+
+{% block main %}
+<div class="content-area">
+    <h1 class="heading">Add a Character</h1>
+    <form action="" class="text flex-area flex-vertical">
+        <div class="flex-area flex-wrap">
+            <label>
+                <span>Name:</span>
+                <input type="text" name="name" id="">
+            </label>
+            <label>
+                <span>Age:</span>
+                <input type="text" name="age" id="">
+            </label>
+            <label>
+                <span>Gender:</span>
+                <input type="text" name="gender" id="">
+            </label>
+            <label>
+                <span>Height:</span>
+                <input type="text" name="height" id="">
+            </label>
+            <label>
+                <span>Weight:</span>
+                <input type="text" name="weight" id="">
+            </label>
+            <label>
+                <span>Alignment:</span>
+                <input type="text" name="alignment" id="">
+            </label>
+        </div>
+        <label>
+            <span>Description:</span>
+            <textarea name="description" id="" cols="100" rows="10" class="form-input"></textarea>
+            <!--<input type="text" name="description" id="">-->
+        </label>
+        <p class="list">
+            <input type="submit" value="Add" class="item">
+        </p>
+    </form>
+</div>
+{% endblock %}
