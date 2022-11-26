@@ -1,5 +1,5 @@
 -- NOW --
-make remove/delete buttons work
+make remove buttons work
 make forms to input attribute-type entities
 make drop-down based forms to link entities via bridge tables
 

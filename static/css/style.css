@@ -140,6 +140,7 @@ body {
     text-decoration: none;
     color: white;
     margin: 5px;
+    border: none;
 }
 .item:hover {
     background-color: orangered;
@@ -193,4 +194,18 @@ form label input {
 }
 .capitalize {
     text-transform: capitalize;
+}
+.block {
+    display: inline-block;
+}
+.no-padding {
+    padding: 0;
+}
+
+input {
+    font-size: medium;
+}
+
+textarea {
+    font-size: medium;
 }

@@ -323,3 +323,17 @@ def db_update(_from, _id, _val):
     record = table[_id - 1]
     for key in _val.keys():
         record[key] = _val[key]
+
+def db_delete(_from, _col, _val):
+    table = mapper[_from]
+    indices = []
+    for i in range(len(table)):
+        flag = True
+        for j in range(len(_col)):
+            if table[i][_col[j]] != _val[j]:
+                flag = False
+        if flag:
+            indices.append(i)
+    
+    for idx in indices:
+        table.pop(idx)

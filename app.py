@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from form_builder import form_builder
-from dummydb import db_query, db_join, db_insert, db_update
+from dummydb import db_query, db_join, db_insert, db_update, db_delete
 
 app = Flask(__name__)
 app.secret_key = b'dbJKSwh873y9WPh&*'
@@ -218,3 +218,9 @@ def update(table_name, record_id):
     
     db_update(table_name, record_id, request.form.to_dict())
     return redirect(url_for(table_name, id=record_id))
+
+@app.route('/<table_name>/<int:record_id>/delete', methods=['POST'])
+def delete(table_name, record_id):
+    db_delete(table_name, ['id'], [record_id])
+    print('record deleted')
+    return redirect(url_for('profile', id=session['user']['id']))

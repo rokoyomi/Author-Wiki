@@ -8,8 +8,10 @@
         <div class="flex-area flex-justify-sp-bw flex-align-center">
             <span class="heading-2">{{ element['name'] }}</span>
             <div>
-                <a href="{{ url_for('update', table_name=table_name, record_id=element['id']) }}" class="item">Update</a>
-                <a href="" class="item">Delete</a>
+                <form action="{{ url_for('delete', table_name=table_name, record_id=element['id']) }}", method="post">
+                    <a href="{{ url_for('update', table_name=table_name, record_id=element['id']) }}" class="item">Update</a>
+                    <input type="submit" class="item" value="Delete" onclick="return confirm('Are you sure you want to delete Record?')">
+                </form>
             </div>
         </div>
         <p class="text">{{ element['description'] }}</p>
