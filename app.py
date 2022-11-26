@@ -126,16 +126,16 @@ def arc(story_id, id):
         locations=_locations, items=_items
     )
 
-@app.route('/worlds/<int:world_id>')
-def world(world_id):
-    _world = db_query('world', ['id'], [world_id], False)
+@app.route('/worlds/<int:id>')
+def world(id):
+    _world = db_query('world', ['id'], [id], False)
     if _world == None:
         return 'Not Found',404
 
-    _locations = db_query('location', ['world_id'], [world_id])
-    _world_races = db_query('race_lives_in', ['world_id'], [world_id])
+    _locations = db_query('location', ['world_id'], [id])
+    _world_races = db_query('race_lives_in', ['world_id'], [id])
     _races = [db_query('race', ['id'], [_race_world['race_id']], False) for _race_world in _world_races]
-    _world_items = db_query('item_found_in_world', ['world_id'], [world_id])
+    _world_items = db_query('item_found_in_world', ['world_id'], [id])
     _items = [db_query('item', ['id'], [_world_item['item_id']], False) for _world_item in _world_items]
 
     return render_template('elements/world.jinja', 

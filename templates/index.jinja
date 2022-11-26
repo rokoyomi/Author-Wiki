@@ -38,7 +38,7 @@
         <p class="text">All your worlds are shown here</p>
         <div class="list">
             {% for world in worlds %}
-            <a href="{{ url_for('world', world_id=world['id']) }}" class="item">{{ world['name'] }}</a>
+            <a href="{{ url_for('world', id=world['id']) }}" class="item">{{ world['name'] }}</a>
             {% endfor %}
             <a href="{{ url_for('form', table_name='world') }}" class="item">+</a>
         </div>
