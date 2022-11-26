@@ -2,14 +2,23 @@
 
 {% block main %}
 <div class="content-area">
-    <h1 class="heading">Form</h1>
-    <form action="" class="text">
-        {% for element in elements %}
+    <h1 class="heading">Add a {{ table_name }}</h1>
+    <form action="{{ url_for('form', table_name=table_name) }}" method="post" class="text capitalize flex-area flex-vertical">
+        <div class="flex-area flex-wrap">
+            {% for column in columns %}
+                {% if '_id' not in column['COLUMN_NAME'] and 'description' != column['COLUMN_NAME'] and 'id' != column['COLUMN_NAME'] %}
+                    <label>
+                        <span class="capitalize">{{ column['COLUMN_NAME'] }}:</span>
+                        <input type="text" name="{{ column['COLUMN_NAME'].replace('_', ' ') }}">
+                    </label>
+                {% endif %}
+            {% endfor %}
+        </div>
         <label>
-            <span>{{ element['COLUMN_NAME'] }}: </span>
-            <input type="text" name="{{ element['COLUMN_NAME'] }}" id="">
-        </label><br>
-        {% endfor %}
+            <span>Description:</span>
+            <textarea name="description" id="" cols="100" rows="10" class="form-input"></textarea>
+            <!--<input type="text" name="description" id="">-->
+        </label>
         <p class="list">
             <input type="submit" value="Add" class="item">
         </p>

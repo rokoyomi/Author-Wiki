@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from form_builder import form_builder
-from dummydb import query, join
+from dummydb import query, join, insert
 
 app = Flask(__name__)
 app.secret_key = b'dbJKSwh873y9WPh&*'
@@ -195,8 +195,17 @@ def organization(organization_id):
         author=session['user'], element=_org
     )
 
-@app.route('/forms/<table_name>')
+@app.route('/forms/<table_name>', methods=['GET', 'POST'])
 def form(table_name):
     if 'user' not in session:
         return redirect(url_for('login'))
-    return fb.get_form(table_name)
+    
+    if request.method == 'GET':
+        return fb.get_form(table_name)
+    
+    _form = request.form.to_dict()
+    _form['author_id'] = session['user']['id']
+
+    insert(table_name, _form)
+
+    return redirect(url_for('profile', id=session['user']['id']))

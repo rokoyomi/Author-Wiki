@@ -266,6 +266,13 @@ mapper = {
     'organization':organizations,
 }
 
+def get_columns(_from):
+    table = mapper[_from]
+    columns = []
+    for key in table[0].keys():
+        columns.append({'COLUMN_NAME':key})
+    return columns
+
 def query(_from, _col, _val, _aslist=True):
     res = []
     print(_from, _col, _val)
@@ -295,3 +302,14 @@ def join(listA, listB):
         for key in listB[i].keys():
             res[i][key] = listB[i][key]
     return res
+
+def insert(_to, _val):
+    table = mapper[_to]
+    temp = {}
+    for _key in table[0].keys():
+        if _key in _val:
+            temp[_key] = _val[_key]
+        else:
+            temp[_key] = None
+    temp['id'] = len(table) + 1
+    table.append(temp)
