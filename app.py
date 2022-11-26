@@ -108,7 +108,7 @@ def story(id):
         author=session['user'], element=s, arcs=arcs, table_name='story'
     )
 
-@app.route('/stories/<int:story_id>/arcs/<int:id>')
+@app.route('/stories/<int:story_id>/arcs/<int:id>', methods=['GET','POST'])
 def arc(story_id, id):
     a = db_query('arc', ['id'], [id], False)
     if a == None:
@@ -121,9 +121,18 @@ def arc(story_id, id):
     _arc_items = db_query('item_featured_in', ['arc_id'], [id])
     _items = [db_query('item', ['id'], [_arc_item['item_id']], False) for _arc_item in _arc_items]
 
+    character_list = db_query('characters', ['author_id'], [session['user']['id']])
+    temp = []
+    for i in range(len(character_list)):
+        if character_list[i]['id'] in [ c['id'] for c in _characters]:
+            temp.append(i)
+    temp.reverse()
+    for i in temp:
+        character_list.pop(i)
+
     return render_template('elements/arc.jinja', 
         author=session['user'], element=a, appearances=db_join(_arc_appearances, _characters),
-        locations=_locations, items=_items, table_name='arc'
+        locations=_locations, items=_items, table_name='arc', character_list=character_list
     )
 
 @app.route('/worlds/<int:id>')
@@ -222,5 +231,4 @@ def update(table_name, record_id):
 @app.route('/<table_name>/<int:record_id>/delete', methods=['POST'])
 def delete(table_name, record_id):
     db_delete(table_name, ['id'], [record_id])
-    print('record deleted')
     return redirect(url_for('profile', id=session['user']['id']))

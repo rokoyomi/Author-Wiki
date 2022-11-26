@@ -13,6 +13,32 @@
         </div>
         <p class="text">{{ appearance['role_description'] }}</p>
         {% endfor %}
+
+        <p class="heading-2">Add New</p>
+        <form method="post" action="{{ url_for('arc', story_id=element['story_id'], id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="form_name" value="add_character">
+            <div class="flex-area flex-wrap">
+                <label>
+                    <span>Character</span>
+                    <select name="character_id" class="form-input">
+                        {% for character in character_list %}
+                            <option value="{{ character['id'] }}">{{ character['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>
+                    <span>Role</span>
+                    <input type="text" name="role" class="form-input">
+                </label>
+            </div>
+            <label>
+                <span>Description:</span>
+                <textarea name="description" id="" cols="100" rows="10" class="form-input text" placeholder="Description"></textarea>
+            </label>
+            <p class="list">
+                <input type="submit" class="item" value="+ Add">
+            </p>
+        </form>
     </div>
 
     <div class="content-area">

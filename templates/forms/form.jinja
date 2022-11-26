@@ -9,7 +9,7 @@
                 {% if '_id' not in column['COLUMN_NAME'] and 'description' != column['COLUMN_NAME'] and 'id' != column['COLUMN_NAME'] %}
                     <label>
                         <span class="capitalize">{{ column['COLUMN_NAME'] }}:</span>
-                        <input type="text" name="{{ column['COLUMN_NAME'].replace('_', ' ') }}" value="{{ existing[column['COLUMN_NAME']] }}" placeholder="{{ column['COLUMN_NAME'].replace('_', ' ') }}">
+                        <input type="text" name="{{ column['COLUMN_NAME'].replace('_', ' ') }}" value="{{ existing[column['COLUMN_NAME']] }}" placeholder="{{ column['COLUMN_NAME'].replace('_', ' ') }}" class="form-input">
                     </label>
                 {% endif %}
             {% endfor %}

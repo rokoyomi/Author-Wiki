@@ -156,18 +156,12 @@ form label span {
     padding: 5px;
 }
 
-form label input {
-    padding: 5px;
-    background-color: rgb(50, 50, 60);
-    color: white;
-    border: thin solid white;
-}
-
 .form-input {
     padding: 5px;
     background-color: rgb(50, 50, 60);
     color: white;
     border: thin solid white;
+    font-size: medium;
 }
 
 .flex-area {
