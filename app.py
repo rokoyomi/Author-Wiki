@@ -108,17 +108,17 @@ def story(id):
         author=session['user'], element=s, arcs=arcs
     )
 
-@app.route('/stories/<int:story_id>/arcs/<int:arc_id>')
-def arc(story_id, arc_id):
-    a = db_query('arc', ['id'], [arc_id], False)
+@app.route('/stories/<int:story_id>/arcs/<int:id>')
+def arc(story_id, id):
+    a = db_query('arc', ['id'], [id], False)
     if a == None:
         return 'Not Found',404
     
-    _arc_appearances = db_query('appearance', ['arc_id'], [arc_id])
+    _arc_appearances = db_query('appearance', ['arc_id'], [id])
     _characters = [db_query('characters', ['id'], [appearance['character_id']], False) for appearance in _arc_appearances]
-    _arc_locations = db_query('arc_occurs_in', ['arc_id'], [arc_id])
+    _arc_locations = db_query('arc_occurs_in', ['arc_id'], [id])
     _locations = [db_query('location', ['id'], [_arc_location['location_id']], False) for _arc_location in _arc_locations]
-    _arc_items = db_query('item_featured_in', ['arc_id'], [arc_id])
+    _arc_items = db_query('item_featured_in', ['arc_id'], [id])
     _items = [db_query('item', ['id'], [_arc_item['item_id']], False) for _arc_item in _arc_items]
 
     return render_template('elements/arc.jinja', 

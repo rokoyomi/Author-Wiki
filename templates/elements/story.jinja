@@ -16,7 +16,7 @@
         {% for arc in arcs %}
         <div class="flex-area flex-align-center flex-justify-sp-bw">
             <div>
-                <a href="{{ url_for('arc', story_id=arc['story_id'], arc_id=arc['id']) }}" class="heading-2">{{ arc['name'] }}</a>
+                <a href="{{ url_for('arc', story_id=arc['story_id'], id=arc['id']) }}" class="heading-2">{{ arc['name'] }}</a>
             </div>
             <a href="" class="item">Remove</a>
         </div>
