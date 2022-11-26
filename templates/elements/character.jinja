@@ -19,7 +19,11 @@
 {% block main_content_extension %}
     <label class="flex-area flex-align-center">
         <span class="text">Race: </span>
-        <a href="{{ url_for('race', race_id=race['id']) }}" class="text highlightable underlined">{{ race['name'] }}</a>
+        {% if race %}
+            <a href="{{ url_for('race', race_id=race['id']) }}" class="text highlightable underlined">{{ race['name'] }}</a>
+        {% else %}
+            <span class="text">Unknown</span>
+        {% endif %}
     </label>
 {% endblock main_content_extension %}
 
