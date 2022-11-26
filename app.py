@@ -73,19 +73,19 @@ def profile(id: int):
         worlds=worlds,locations=locations, items=items, races=races, organizations=organizations
     )
 
-@app.route('/characters/<int:character_id>')
-def character(character_id: int):
+@app.route('/characters/<int:id>')
+def character(id: int):
     #chara = query(
     #    "SELECT * FROM characters WHERE id = %s and author_id = %s",
     #    (character_id, session['user']['id']), False
     #)
 
-    _character = db_query('characters', ['id','author_id'], [character_id, session['user']['id']], False)
+    _character = db_query('characters', ['id','author_id'], [id, session['user']['id']], False)
     if _character == None:
         return 'Not Found',404
 
-    traits= db_query('traits', ['character_id'], [character_id])
-    arc_appearances = db_query('appearance', ['character_id'], [character_id])
+    traits= db_query('traits', ['character_id'], [id])
+    arc_appearances = db_query('appearance', ['character_id'], [id])
     print(arc_appearances)
     _arcs = [db_query('arc', ['id'], [appearance['arc_id']], False) for appearance in arc_appearances]
     _race = db_query('race', ['id'], [_character['race_id']], False)
@@ -95,14 +95,14 @@ def character(character_id: int):
         traits=traits, appearances=db_join(_arcs, arc_appearances), race=_race
     )
 
-@app.route('/stories/<int:story_id>')
-def story(story_id):
-    s = db_query('story', ['id'], [story_id], False)
+@app.route('/stories/<int:id>')
+def story(id):
+    s = db_query('story', ['id'], [id], False)
 
     if s == None:
         return 'Not Found',404
 
-    arcs = db_query('arc', ['story_id'], [story_id])
+    arcs = db_query('arc', ['story_id'], [id])
 
     return render_template('elements/story.jinja', 
         author=session['user'], element=s, arcs=arcs

@@ -44,7 +44,7 @@
         {% for appearance in appearances %}
         <div class="flex-area flex-align-center flex-justify-sp-bw">
             <div>
-                <a href="{{ url_for('story', story_id=appearance['story_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
+                <a href="{{ url_for('story', id=appearance['story_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
                 <span class="text">{{ appearance['role'] }}</span>
             </div>
             <a href="" class="item">Remove</a>

@@ -19,7 +19,7 @@
         {% for character in characters %}
             <div class="flex-area flex-align-center flex-justify-sp-bw">
                 <div>
-                    <a href="{{ url_for('character', character_id=character['id']) }}" class="heading-2">{{ character['name'] }}</a>
+                    <a href="{{ url_for('character', id=character['id']) }}" class="heading-2">{{ character['name'] }}</a>
                 </div>
                 <a href="" class="item">Remove</a>
             </div>
