@@ -143,14 +143,14 @@ def world(id):
         races=db_join(_world_races, _races), items=_items
     )
 
-@app.route('/locations/<int:location_id>')
-def location(location_id):
-    _location = db_query('location', ['id'], [location_id], False)
+@app.route('/locations/<int:id>')
+def location(id):
+    _location = db_query('location', ['id'], [id], False)
     if _location == None:
         return 'Not Found', 404
     
-    _child_loc = db_query('location', ['location_id'], [location_id])
-    _location_arcs = db_query('arc_occurs_in', ['location_id'], [location_id])
+    _child_loc = db_query('location', ['location_id'], [id])
+    _location_arcs = db_query('arc_occurs_in', ['location_id'], [id])
     _arcs = [db_query('arc', ['id'], [_location_arc['arc_id']], False) for _location_arc in _location_arcs]
 
     return render_template('elements/location.jinja',

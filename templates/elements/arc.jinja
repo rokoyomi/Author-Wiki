@@ -20,7 +20,7 @@
         {% for location in locations %}
         <div class="flex-area flex-align-center flex-justify-sp-bw">
             <div>
-                <a href="{{ url_for('location', location_id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
+                <a href="{{ url_for('location', id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
                 <span class="text">{{ location['category'] }}</span>
             </div>
             <a href="" class="item">Remove</a>

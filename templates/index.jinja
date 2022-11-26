@@ -49,7 +49,7 @@
         <p class="text">All your locations are shown here</p>
         <div class="list">
             {% for location in locations %}
-            <a href="{{ url_for('location', location_id=location['id']) }}" class="item">{{ location['name'] }}</a>
+            <a href="{{ url_for('location', id=location['id']) }}" class="item">{{ location['name'] }}</a>
             {% endfor %}
             <a href="{{ url_for('form', table_name='location') }}" class="item">+</a>
         </div>
