@@ -1,10 +1,20 @@
-link item to arc and world
+-- NOW --
+make forms to input basic entities
+make forms to input attribute-type entities
+make drop-down based forms to link entities via bridge tables
 
-make input and edit forms
-make add/delete/edit buttons work
+-- NEXT --
+link organization to location (base location)
+link organization to character (leader)
 
+-- LATER --
+make remove/delete/edit buttons work
 replace dummy queries with actual db queries
 updates should cascade
 deletes should set default (mostly)
 
+-- WAY LATER --
 optionally remove story_id from the arc links
+add category attributes to most entities
+add descriptions to bridge tables
+improve ui
