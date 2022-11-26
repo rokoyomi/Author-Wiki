@@ -64,7 +64,11 @@ characters = [
 ]
 
 traits = [
-    
+    {
+        'character_id':2,
+        'name':'Sample Heading',
+        'description':'Sample Desc',
+    },
 ]
 
 worlds = [
