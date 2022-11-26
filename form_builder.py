@@ -1,6 +1,6 @@
 from flask import render_template, session
 from flask_mysqldb import MySQL
-from dummydb import get_columns
+from dummydb import db_get_columns
 
 class form_builder:
     def __init__(self, mysql : MySQL) -> None:
@@ -9,7 +9,7 @@ class form_builder:
     def get_form(self, table_name):
         return render_template(
             'forms/form.jinja', author=session['user'], 
-            table_name=table_name, columns = get_columns(table_name)
+            table_name=table_name, columns = db_get_columns(table_name)
         )
 
     def character_form(self):

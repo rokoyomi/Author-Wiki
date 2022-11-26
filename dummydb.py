@@ -266,14 +266,14 @@ mapper = {
     'organization':organizations,
 }
 
-def get_columns(_from):
+def db_get_columns(_from):
     table = mapper[_from]
     columns = []
     for key in table[0].keys():
         columns.append({'COLUMN_NAME':key})
     return columns
 
-def query(_from, _col, _val, _aslist=True):
+def db_query(_from, _col, _val, _aslist=True):
     res = []
     print(_from, _col, _val)
     try:
@@ -294,7 +294,7 @@ def query(_from, _col, _val, _aslist=True):
         return res
     return None
 
-def join(listA, listB):
+def db_join(listA, listB):
     res = [{} for i in range(len(listA))]
     for i in range(len(res)):
         for key in listA[i].keys():
@@ -303,7 +303,7 @@ def join(listA, listB):
             res[i][key] = listB[i][key]
     return res
 
-def insert(_to, _val):
+def db_insert(_to, _val):
     table = mapper[_to]
     temp = {}
     for _key in table[0].keys():
