@@ -213,7 +213,8 @@ def form(table_name):
 @app.route('/<table_name>/<int:record_id>/update', methods=['GET', 'POST'])
 def update(table_name, record_id):
     if request.method == 'GET':
-        return fb.get_form(table_name, post_addr=url_for('update', table_name=table_name, record_id=record_id))
+        existing = db_query(table_name, ['id'], [record_id], False)
+        return fb.get_form(table_name, url_for('update', table_name=table_name, record_id=record_id), existing)
     
     db_update(table_name, record_id, request.form.to_dict())
     return redirect(url_for(table_name, id=record_id))
