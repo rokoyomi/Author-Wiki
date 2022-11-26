@@ -186,9 +186,9 @@ def item(id):
         author=session['user'], element=_item, worlds = _worlds, arcs=_arcs
     )
 
-@app.route('/organizations/<int:organization_id>')
-def organization(organization_id):
-    _org = db_query('organization', ['id'], [organization_id], False)
+@app.route('/organizations/<int:id>')
+def organization(id):
+    _org = db_query('organization', ['id'], [id], False)
 
     return render_template(
         'elements/element_base.jinja', 

@@ -82,7 +82,7 @@
         <p class="text">All your organisations are shown here</p>
         <div class="list">
             {% for organization in organizations %}
-            <a href="{{ url_for('organization', organization_id=organization['id']) }}" class="item">{{ organization['name'] }}</a>
+            <a href="{{ url_for('organization', id=organization['id']) }}" class="item">{{ organization['name'] }}</a>
             {% endfor %}
             <a href="{{ url_for('form', table_name='organization') }}" class="item">+</a>
         </div>
