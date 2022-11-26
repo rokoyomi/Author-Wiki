@@ -34,6 +34,7 @@ body {
     cursor: pointer;
     font-size: 1.7em;
     margin: 5px 0px;
+    text-transform: capitalize;
 }
 .heading-2 {
     color: white;
@@ -42,6 +43,7 @@ body {
     margin: 5px 0px;
     text-decoration: none;
     cursor: pointer;
+    text-transform: capitalize;
 }
 .heading-2:hover {
     color: orangered;
@@ -188,4 +190,7 @@ form label input {
 }
 .underlined {
     text-decoration: underline;
+}
+.capitalize {
+    text-transform: capitalize;
 }
