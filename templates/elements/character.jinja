@@ -20,7 +20,7 @@
     <label class="flex-area flex-align-center">
         <span class="text">Race: </span>
         {% if race %}
-            <a href="{{ url_for('race', race_id=race['id']) }}" class="text highlightable underlined">{{ race['name'] }}</a>
+            <a href="{{ url_for('race', id=race['id']) }}" class="text highlightable underlined">{{ race['name'] }}</a>
         {% else %}
             <span class="text">Unknown</span>
         {% endif %}

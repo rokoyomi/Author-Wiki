@@ -19,7 +19,7 @@
         {% for race in races %}
             <div class="flex-area flex-align-center flex-justify-sp-bw">
                 <div>
-                    <a href="{{ url_for('race', race_id=race['id']) }}" class="heading-2">{{ race['name'] }}</a>
+                    <a href="{{ url_for('race', id=race['id']) }}" class="heading-2">{{ race['name'] }}</a>
                     <span class="text">{{ race['category'] }}</span>
                 </div>
                 <a href="" class="item">Remove</a>

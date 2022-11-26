@@ -60,7 +60,7 @@
         <p class="text">All your races are shown here</p>
         <div class="list">
             {% for race in races %}
-            <a href="{{ url_for('race', race_id=race['id']) }}" class="item">{{ race['name'] }}</a>
+            <a href="{{ url_for('race', id=race['id']) }}" class="item">{{ race['name'] }}</a>
             {% endfor %}
             <a href="{{ url_for('form', table_name='race') }}" class="item">+</a>
         </div>

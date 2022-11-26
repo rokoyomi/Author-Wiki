@@ -157,15 +157,15 @@ def location(id):
         author=session['user'], element=_location, locations=_child_loc, arcs=_arcs
     )
 
-@app.route('/races/<int:race_id>')
-def race(race_id):
-    _race = db_query('race', ['id'], [race_id], False)
+@app.route('/races/<int:id>')
+def race(id):
+    _race = db_query('race', ['id'], [id], False)
     if _race == None:
         return 'Not Found', 404
     
-    _race_worlds = db_query('race_lives_in', ['race_id'], [race_id])
+    _race_worlds = db_query('race_lives_in', ['race_id'], [id])
     _worlds = [db_query('world', ['id'], [_race_world['world_id']], False) for _race_world in _race_worlds]
-    _characters = db_query('characters', ['race_id'], [race_id])
+    _characters = db_query('characters', ['race_id'], [id])
 
     return render_template('elements/race.jinja',
         author=session['user'], element=_race, worlds=_worlds, characters=_characters
