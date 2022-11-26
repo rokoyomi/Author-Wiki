@@ -74,7 +74,7 @@ def profile(id: int):
     )
 
 @app.route('/characters/<int:id>')
-def character(id: int):
+def characters(id: int):
     #chara = query(
     #    "SELECT * FROM characters WHERE id = %s and author_id = %s",
     #    (character_id, session['user']['id']), False
@@ -92,7 +92,7 @@ def character(id: int):
 
     return render_template('elements/character.jinja', 
         author= session['user'], element=_character,
-        traits=traits, appearances=db_join(_arcs, arc_appearances), race=_race
+        traits=traits, appearances=db_join(_arcs, arc_appearances), race=_race, table_name='characters'
     )
 
 @app.route('/stories/<int:id>')
@@ -105,7 +105,7 @@ def story(id):
     arcs = db_query('arc', ['story_id'], [id])
 
     return render_template('elements/story.jinja', 
-        author=session['user'], element=s, arcs=arcs
+        author=session['user'], element=s, arcs=arcs, table_name='story'
     )
 
 @app.route('/stories/<int:story_id>/arcs/<int:id>')
@@ -123,7 +123,7 @@ def arc(story_id, id):
 
     return render_template('elements/arc.jinja', 
         author=session['user'], element=a, appearances=db_join(_arc_appearances, _characters),
-        locations=_locations, items=_items
+        locations=_locations, items=_items, table_name='arc'
     )
 
 @app.route('/worlds/<int:id>')
@@ -140,7 +140,7 @@ def world(id):
 
     return render_template('elements/world.jinja', 
         author=session['user'], element=_world, locations=_locations, 
-        races=db_join(_world_races, _races), items=_items
+        races=db_join(_world_races, _races), items=_items, table_name='world'
     )
 
 @app.route('/locations/<int:id>')
@@ -154,7 +154,7 @@ def location(id):
     _arcs = [db_query('arc', ['id'], [_location_arc['arc_id']], False) for _location_arc in _location_arcs]
 
     return render_template('elements/location.jinja',
-        author=session['user'], element=_location, locations=_child_loc, arcs=_arcs
+        author=session['user'], element=_location, locations=_child_loc, arcs=_arcs, table_name='location'
     )
 
 @app.route('/races/<int:id>')
@@ -168,7 +168,7 @@ def race(id):
     _characters = db_query('characters', ['race_id'], [id])
 
     return render_template('elements/race.jinja',
-        author=session['user'], element=_race, worlds=_worlds, characters=_characters
+        author=session['user'], element=_race, worlds=_worlds, characters=_characters, table_name='race'
     )
 
 @app.route('/items/<int:id>')
@@ -183,7 +183,7 @@ def item(id):
     _arcs = [db_query('arc', ['id'], [_item_arc['arc_id']], False) for _item_arc in _item_arcs]
 
     return render_template('elements/item.jinja',
-        author=session['user'], element=_item, worlds = _worlds, arcs=_arcs
+        author=session['user'], element=_item, worlds = _worlds, arcs=_arcs, table_name='item'
     )
 
 @app.route('/organizations/<int:id>')
@@ -192,7 +192,7 @@ def organization(id):
 
     return render_template(
         'elements/element_base.jinja', 
-        author=session['user'], element=_org
+        author=session['user'], element=_org, table_name='organization'
     )
 
 @app.route('/forms/<table_name>', methods=['GET', 'POST'])
@@ -201,7 +201,7 @@ def form(table_name):
         return redirect(url_for('login'))
     
     if request.method == 'GET':
-        return fb.get_form(table_name)
+        return fb.get_form(table_name, post_addr=url_for('form', table_name=table_name))
     
     _form = request.form.to_dict()
     _form['author_id'] = session['user']['id']
@@ -213,7 +213,7 @@ def form(table_name):
 @app.route('/<table_name>/<int:record_id>/update', methods=['GET', 'POST'])
 def update(table_name, record_id):
     if request.method == 'GET':
-        return fb.get_form(table_name)
+        return fb.get_form(table_name, post_addr=url_for('update', table_name=table_name, record_id=record_id))
     
     db_update(table_name, record_id, request.form.to_dict())
-    return redirect(url_for(table_name), id=record_id)
+    return redirect(url_for(table_name, id=record_id))

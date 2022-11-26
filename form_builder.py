@@ -6,10 +6,10 @@ class form_builder:
     def __init__(self, mysql : MySQL) -> None:
         self.mysql = mysql
     
-    def get_form(self, table_name):
+    def get_form(self, table_name, post_addr):
         return render_template(
             'forms/form.jinja', author=session['user'], 
-            table_name=table_name, columns = db_get_columns(table_name)
+            table_name=table_name, columns = db_get_columns(table_name), post_addr=post_addr
         )
 
     def character_form(self):

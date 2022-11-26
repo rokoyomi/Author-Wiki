@@ -3,7 +3,7 @@
 {% block main %}
 <div class="content-area">
     <h1 class="heading">Add a {{ table_name }}</h1>
-    <form action="{{ url_for('form', table_name=table_name) }}" method="post" class="text capitalize flex-area flex-vertical">
+    <form action="{{ post_addr }}" method="post" class="text capitalize flex-area flex-vertical">
         <div class="flex-area flex-wrap">
             {% for column in columns %}
                 {% if '_id' not in column['COLUMN_NAME'] and 'description' != column['COLUMN_NAME'] and 'id' != column['COLUMN_NAME'] %}

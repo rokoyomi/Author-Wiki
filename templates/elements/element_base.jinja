@@ -8,7 +8,7 @@
         <div class="flex-area flex-justify-sp-bw flex-align-center">
             <span class="heading-2">{{ element['name'] }}</span>
             <div>
-                <a href="" class="item">Update</a>
+                <a href="{{ url_for('update', table_name=table_name, record_id=element['id']) }}" class="item">Update</a>
                 <a href="" class="item">Delete</a>
             </div>
         </div>

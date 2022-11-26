@@ -16,7 +16,7 @@
         <p class="text">All your characters are shown here</p>
         <div class="list">
             {% for character in characters_list %}
-            <a href="{{ url_for('character', id=character['id']) }}" class="item">{{ character['name'] }}</a>
+            <a href="{{ url_for('characters', id=character['id']) }}" class="item">{{ character['name'] }}</a>
             {% endfor %}
             <a href="{{ url_for('form', table_name='characters') }}" class="item">+</a>
         </div>
