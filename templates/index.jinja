@@ -76,4 +76,15 @@
             <a href="{{ url_for('form', table_name='item') }}" class="item">+</a>
         </div>
     </div>
+
+    <div class="content-area">
+        <h1 class="heading">Organizations</h1>
+        <p class="text">All your organisations are shown here</p>
+        <div class="list">
+            {% for organization in organizations %}
+            <a href="{{ url_for('organization', organization_id=organization['id']) }}" class="item">{{ organization['name'] }}</a>
+            {% endfor %}
+            <a href="{{ url_for('form', table_name='organization') }}" class="item">+</a>
+        </div>
+    </div>
 {% endblock %}

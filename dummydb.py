@@ -14,6 +14,7 @@ stories = [
         'id':1,             # pk
         'author_id':1,      # fk, not null
         'name':'Bleach',    # not null
+        'status':'Ongoing',
         'description':"Bleach (stylized as BLEACH) is a Japanese manga series written and illustrated by Tite Kubo. It follows the adventures of a teenager Ichigo Kurosaki, who inherits his parents' destiny after he obtains the powers of a Soul Reaper—a death personification similar to the Grim Reaper—from another Soul Reaper, Rukia Kuchiki."
     },
 ]
@@ -122,18 +123,21 @@ races = [
         'id':1,
         'author_id':1,
         'name':'Human',
+        'category':'Human',
         'description':'Normal humans, no different from the humanity of our world.'
     },
     {
         'id':2,
         'author_id':1,
-        'name':'Hollows',
+        'name':'Hollow',
+        'category':'Monster',
         'description':'Lost souls with lingering regrets that were unable to move on.'
     },
     {
         'id':3,
         'author_id':1,
-        'name':'Soul Reapers',
+        'name':'Soul Reaper',
+        'category':'Human',
         'description':'Responsible for maintaining the balance of souls in the three realms.'
     },
 ]
@@ -143,32 +147,32 @@ items = [
         'id':1,
         'author_id':1,
         'name':'Excalibur',
-        'rarity':'legendary',
-        'type':'weapon',
-        'description':'The mythical sqord of King Arthur.'
+        'rarity':'Legendary',
+        'category':'Weapon',
+        'description':'The mythical sword of King Arthur.'
     },
     {
         'id':2,
         'author_id':1,
         'name':'Health Potion',
-        'rarity':'common',
-        'type':'consumable',
+        'rarity':'Common',
+        'category':'Consumable',
         'description':'Common item easily accessible to most people.'
     },
     {
         'id':3,
         'author_id':1,
         'name':'Zangetsu',
-        'rarity':'unique',
-        'type':'weapon',
+        'rarity':'Unique',
+        'category':'Weapon',
         'description':"Ichigo Kurosaki's Zanpakuto"
     },
     {
         'id':4,
         'author_id':1,
         'name':'Zanpakuto',
-        'rarity':'rare',
-        'type':'weapon',
+        'rarity':'Rare',
+        'category':'Weapon',
         'description':'The weapon of the Soul Reapers. It is unique for every soul reaper.'
     },
 ]
@@ -176,9 +180,12 @@ items = [
 organizations = [
     {
         'id':1,
+        'author_id':1,
         'leader_id':1,
+        'base_location_id':1,
         'name': '13 Court Guard Squads',
-    }
+        'description':'The guardians of Soul Society. They reside in the Sereitei and maintain the baance of Souls between the World of the Living and Soul Society',
+    },
 ]
 
 character_appears_in = [
@@ -227,6 +234,17 @@ race_lives_in = [
         'race_id':3,
         'world_id':3,
     },
+    {
+        'race_id':2,
+        'world_id':1,
+    }
+]
+
+item_found_in_world = [
+    {
+        'item_id':4,
+        'world_id':3,
+    }
 ]
 
 # ignore this
@@ -244,6 +262,8 @@ mapper = {
     'appearance':character_appears_in,
     'race_lives_in':race_lives_in,
     'arc_occurs_in':arc_occurs_in,
+    'item_found_in_world':item_found_in_world,
+    'organization':organizations,
 }
 
 def query(_from, _col, _val, _aslist=True):

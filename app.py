@@ -66,10 +66,11 @@ def profile(id: int):
     locations = query('location', ['author_id'], [user['id']])
     items = query('item', ['author_id'], [user['id']])
     races = query('race', ['author_id'], [user['id']])
+    organizations = query('organization', ['author_id'], [user['id']])
 
     return render_template('index.jinja', 
         author=user, characters_list=characters, stories=stories, 
-        worlds=worlds,locations=locations, items=items, races=races
+        worlds=worlds,locations=locations, items=items, races=races, organizations=organizations
     )
 
 @app.route('/characters/<int:character_id>')
@@ -113,14 +114,16 @@ def arc(story_id, arc_id):
     if a == None:
         return 'Not Found',404
     
-    arc_appearances = query('appearance', ['arc_id'], [arc_id])
-    _characters = [query('characters', ['id'], [appearance['character_id']], False) for appearance in arc_appearances]
+    _arc_appearances = query('appearance', ['arc_id'], [arc_id])
+    _characters = [query('characters', ['id'], [appearance['character_id']], False) for appearance in _arc_appearances]
     _arc_locations = query('arc_occurs_in', ['arc_id'], [arc_id])
     _locations = [query('location', ['id'], [_arc_location['location_id']], False) for _arc_location in _arc_locations]
+    _arc_items = query('item_featured_in', ['arc_id'], [arc_id])
+    _items = [query('item', ['id'], [_arc_item['item_id']], False) for _arc_item in _arc_items]
 
     return render_template('elements/arc.jinja', 
-        author=session['user'], element=a, appearances=join(arc_appearances, _characters),
-        locations=_locations
+        author=session['user'], element=a, appearances=join(_arc_appearances, _characters),
+        locations=_locations, items=_items
     )
 
 @app.route('/worlds/<int:world_id>')
@@ -130,11 +133,14 @@ def world(world_id):
         return 'Not Found',404
 
     _locations = query('location', ['world_id'], [world_id])
-    _races_worlds = query('race_lives_in', ['world_id'], [world_id])
-    _races = [query('race', ['id'], [_race_world['race_id']], False) for _race_world in _races_worlds]
+    _world_races = query('race_lives_in', ['world_id'], [world_id])
+    _races = [query('race', ['id'], [_race_world['race_id']], False) for _race_world in _world_races]
+    _world_items = query('item_found_in_world', ['world_id'], [world_id])
+    _items = [query('item', ['id'], [_world_item['item_id']], False) for _world_item in _world_items]
 
     return render_template('elements/world.jinja', 
-        author=session['user'], element=_world, locations=_locations, races=join(_races_worlds, _races)
+        author=session['user'], element=_world, locations=_locations, 
+        races=join(_world_races, _races), items=_items
     )
 
 @app.route('/locations/<int:location_id>')
@@ -171,8 +177,22 @@ def item(item_id):
     if _item == None:
         return 'Not Found', 404
     
-    return render_template('elements/element_base.jinja',
-        author=session['user'], element=_item
+    _item_worlds = query('item_found_in_world', ['item_id'], [item_id])
+    _worlds = [query('world', ['id'], [item_world['world_id']], False) for item_world in _item_worlds]
+    _item_arcs = query('item_featured_in', ['item_id'], [item_id])
+    _arcs = [query('arc', ['id'], [_item_arc['arc_id']], False) for _item_arc in _item_arcs]
+
+    return render_template('elements/item.jinja',
+        author=session['user'], element=_item, worlds = _worlds, arcs=_arcs
+    )
+
+@app.route('/organizations/<int:organization_id>')
+def organization(organization_id):
+    _org = query('organization', ['id'], [organization_id], False)
+
+    return render_template(
+        'elements/element_base.jinja', 
+        author=session['user'], element=_org
     )
 
 @app.route('/forms/<table_name>')
