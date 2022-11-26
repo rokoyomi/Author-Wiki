@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from form_builder import form_builder
-from dummydb import db_query, db_join, db_insert
+from dummydb import db_query, db_join, db_insert, db_update
 
 app = Flask(__name__)
 app.secret_key = b'dbJKSwh873y9WPh&*'
@@ -210,7 +210,10 @@ def form(table_name):
 
     return redirect(url_for('profile', id=session['user']['id']))
 
-@app.route('/edit/<table_name>/<int:record_id>')
+@app.route('/<table_name>/<int:record_id>/update', methods=['GET', 'POST'])
 def update(table_name, record_id):
+    if request.method == 'GET':
+        return fb.get_form(table_name)
     
-    pass
+    db_update(table_name, record_id, request.form.to_dict())
+    return redirect(url_for(table_name), id=record_id)

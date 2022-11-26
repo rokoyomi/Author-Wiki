@@ -313,3 +313,9 @@ def db_insert(_to, _val):
             temp[_key] = None
     temp['id'] = len(table) + 1
     table.append(temp)
+
+def db_update(_from, _id, _val):
+    table = mapper[_from]
+    record = table[_id - 1]
+    for key in _val.keys():
+        record[key] = _val[key]
