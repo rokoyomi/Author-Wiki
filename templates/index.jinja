@@ -71,7 +71,7 @@
         <p class="text">All your items are shown here</p>
         <div class="list">
             {% for item in items %}
-            <a href="{{ url_for('item', item_id=item['id']) }}" class="item">{{ item['name'] }}</a>
+            <a href="{{ url_for('item', id=item['id']) }}" class="item">{{ item['name'] }}</a>
             {% endfor %}
             <a href="{{ url_for('form', table_name='item') }}" class="item">+</a>
         </div>

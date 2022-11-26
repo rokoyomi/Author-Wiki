@@ -171,15 +171,15 @@ def race(id):
         author=session['user'], element=_race, worlds=_worlds, characters=_characters
     )
 
-@app.route('/items/<int:item_id>')
-def item(item_id):
-    _item = db_query('item', ['id'], [item_id], False)
+@app.route('/items/<int:id>')
+def item(id):
+    _item = db_query('item', ['id'], [id], False)
     if _item == None:
         return 'Not Found', 404
     
-    _item_worlds = db_query('item_found_in_world', ['item_id'], [item_id])
+    _item_worlds = db_query('item_found_in_world', ['item_id'], [id])
     _worlds = [db_query('world', ['id'], [item_world['world_id']], False) for item_world in _item_worlds]
-    _item_arcs = db_query('item_featured_in', ['item_id'], [item_id])
+    _item_arcs = db_query('item_featured_in', ['item_id'], [id])
     _arcs = [db_query('arc', ['id'], [_item_arc['arc_id']], False) for _item_arc in _item_arcs]
 
     return render_template('elements/item.jinja',
