@@ -31,10 +31,25 @@
     <div class="content-area">
         <h1 class="heading">Character Traits</h1>
         {% for trait in traits %}
-        <p class="heading-2">{{ trait['name'] }}</p>
-        <p class="text">{{ trait['description'] }}</p>
+            <div class="flex-area flex-justify-sp-bw flex-align-center">
+                <span class="heading-2">{{ trait['name'] }}</span>
+                <div>
+                    <form action="/characters/{{ element['id'] }}" method="post" class="block">
+                        <input type="hidden" name="form_name" value="update_trait">
+                        <input type="hidden" name="name" value="{{ trait['name'] }}">
+                        <input type="submit" class="item" value="Update">
+                    </form>
+                    <form action="{{ url_for('delete_trait', id=element['id'], name=trait['name']) }}" method="post" class="block">
+                        <input type="hidden" name="form_name" value="remove_trait">
+                        <input type="hidden" name="name" value="{{ trait['name'] }}">
+                        <input type="submit" class="item" value="Remove">
+                    </form>
+                </div>
+            </div>
+            <p class="text">{{ trait['description'] }}</p>
         {% endfor %}
         <form class="list" method="post" action="/characters/{{ element['id'] }}">
+            <input type="hidden" name="form_name" value="add_trait">
             <input type="submit" class="item" value="+ Add">
         </form>
     </div>
@@ -42,12 +57,9 @@
     <div class="content-area">
         <h1 class="heading">Appearances</h1>
         {% for appearance in appearances %}
-        <div class="flex-area flex-align-center flex-justify-sp-bw">
-            <div>
-                <a href="{{ url_for('story', id=appearance['story_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
-                <span class="text">{{ appearance['role'] }}</span>
-            </div>
-            <a href="" class="item">Remove</a>
+        <div>
+            <a href="{{ url_for('story', id=appearance['story_id']) }}" class="heading-2">{{ appearance['name'] }}</a>
+            <span class="text">{{ appearance['role'] }}</span>
         </div>
         <p class="text">{{ appearance['role_description'] }}</p>
         {% endfor %}

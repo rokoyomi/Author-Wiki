@@ -88,8 +88,16 @@ def characters(id: int):
         return 'Not Found',404
     
     if request.method == 'POST':
-        existing = {"character_id":id}
-        return fb.get_form('traits', url_for('form', table_name='traits'), existing)
+        form_name = request.form['form_name']
+        if form_name == "add_trait":
+            existing = {"character_id":id}
+            return fb.get_form('traits', url_for('form', table_name='traits'), existing)
+        elif form_name == "remove_trait":
+            print(1)
+            return redirect(url_for('delete_trait', id=id, name=request.form['name']))
+        elif form_name == "update_trait":
+            print(2)
+            return redirect(url_for('update_trait', id=id, name=request.form['name']))
 
     _traits = query("select * from traits where character_id=%s", (id,))
     _character_appearances = query(
@@ -382,3 +390,44 @@ def delete(table_name, record_id):
         flash(e.args[1])
 
     return redirect(url_for('profile', id=session['user']['id']))
+
+@app.route('/characters/<int:id>/traits/<name>/update', methods=['GET', 'POST'])
+def update_trait(id, name):
+    if 'user' not in session:
+        return redirect('login')
+    
+    existing = query("select * from traits where character_id=%s and name=%s", (id, name), False)
+    author_id = query("select author_id from characters where id=%s", (id,), False)
+    if not existing:
+        return "Not Found",404
+    elif author_id['author_id'] != session['user']['id']:
+        return "Forbidden",403
+    if request.method == "GET":
+        return fb.get_form('traits', url_for('update_trait', id=id, name=name), existing=existing)
+    
+    try:
+        query("update traits set name=%s, description=%s where character_id=%s and name=%s",
+            (request.form['name'], request.form['description'], id, name)
+        )
+        mysql.connection.commit()
+    except MySQLdb.Error as e:
+        flash(e.args[1])
+        return fb.get_form('traits', url_for('update_trait', id=id, name=name), existing=existing)
+    
+    return redirect(url_for('characters', id=id))
+
+@app.route('/characters/<int:id>/traits/<name>/delete', methods=['POST'])
+def delete_trait(id, name):
+    if 'user' not in session:
+        return redirect('login')
+    
+    existing = query("select * from traits where character_id=%s and name=%s", (id, name), False)
+    author_id = query("select author_id from characters where id=%s", (id,), False)
+    if not existing:
+        return "Not Found",404
+    elif author_id['author_id'] != session['user']['id']:
+        return "Forbidden",403
+    
+    query("delete from traits where character_id=%s and name=%s", (id, name))
+    mysql.connection.commit()
+    return redirect(url_for('characters', id=id))
