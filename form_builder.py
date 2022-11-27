@@ -18,6 +18,8 @@ class form_builder:
             'appearance':self.appearance_form,
             'item_featured_in':self.item_feature_form,
             'arc_occurs_in':self.arc_location_form,
+            'item_found_in_world':self.world_item_form,
+            'race_lives_in':self.race_world_form,
         }
     
     def get_form(self, table_name, post_addr, existing=None):
@@ -101,6 +103,22 @@ class form_builder:
             'forms/arc_location_form.jinja', author=session['user'], table_name=table_name, 
             columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
             arc_list=arc_list, location_list=location_list
+        )
+    def world_item_form(self, table_name, post_addr, existing):
+        world_list = self.query("select id, name from world where author_id=%s", (session['user']['id'],))
+        item_list = self.query("select id, name from item where author_id=%s", (session['user']['id'],))
+        return render_template(
+            'forms/world_item_form.jinja', author=session['user'], table_name=table_name, 
+            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
+            world_list=world_list, item_list=item_list
+        )
+    def race_world_form(self, table_name, post_addr, existing):
+        world_list = self.query("select id, name from world where author_id=%s", (session['user']['id'],))
+        race_list = self.query("select id, name from race where author_id=%s", (session['user']['id'],))
+        return render_template(
+            'forms/race_world_form.jinja', author=session['user'], table_name=table_name, 
+            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
+            world_list=world_list, race_list=race_list
         )
     
     def query(self, q : str, t : tuple, l = True, d=True):

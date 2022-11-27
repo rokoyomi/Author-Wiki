@@ -1,0 +1,24 @@
+{% extends "forms/form.jinja" %}
+
+{% block child_controls %}
+    <label>
+        <span>Race</span>
+        <select name="race_id" class="form-input">
+            {% for race in race_list %}
+                <option value="{{ race['id'] }}" {% if existing and existing['race_id'] and existing['race_id']|int == race['id'] %}selected="selected"{% endif %}>
+                    {{ race['name'] }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        <span>World</span>
+        <select name="world_id" class="form-input">
+            {% for world in world_list %}
+                <option value="{{ world['id'] }}" {% if existing and existing['world_id'] and existing['world_id']|int == world['id'] %}selected="selected"{% endif %}>
+                    {{ world['name'] }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+{% endblock child_controls %}

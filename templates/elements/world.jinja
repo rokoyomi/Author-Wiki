@@ -28,6 +28,13 @@
             </div>
             <p class="text">{{ race['description'] }}</p>
         {% endfor %}
+
+        <form method="post" action="{{ url_for('world', id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="form_name" value="add_race">
+            <p class="list">
+                <input type="submit" class="item" value="+ Add">
+            </p>
+        </form>
     </div>
     <div class="content-area">
         <h1 class="heading">Items Found</h1>
@@ -42,5 +49,12 @@
             </div>
             <p class="text">{{ item['description'] }}</p>
         {% endfor %}
+
+        <form method="post" action="{{ url_for('world', id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="form_name" value="add_item">
+            <p class="list">
+                <input type="submit" class="item" value="+ Add">
+            </p>
+        </form>
     </div>
 {% endblock content %}

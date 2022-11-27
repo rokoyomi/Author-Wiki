@@ -5,7 +5,7 @@ select * from story;
 INSERT INTO arc(id,story_id,name,description) values (1,1,'Soul society arc','Ichigo goes to soul society, beats up Byakuya, gets thoroughly beat up by Aizen');
 INSERT INTO arc(id,story_id,name,description) values (2,1,'Huecomundo arc','Ichigo goes to Huecomundo, beats up a bunch of Espada');
 select * from arc;
-INSERT INTO race(id,author_id,name,category,description) values(1,1,'Human','Normal humans', 'no different from the humanity of our world.');
+INSERT INTO race(id,author_id,name,category,description) values(1,1,'Human','Human', 'Normal humans no different from the humanity of our world.');
 INSERT INTO race(id,author_id,name,category,description) values(2,1,'Hollow','Monster','Lost souls with lingering regrets that were unable to move on.');
 INSERT INTO race(id,author_id,name,category,description) values(3,1,'Soul Reaper','Humans','Responsible for maintaining the balance of souls in the three realms');
 select * from race;

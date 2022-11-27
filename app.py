@@ -171,13 +171,21 @@ def arc(story_id, id):
         locations=_featured_locations, items=_featured_items, table_name='arc', character_list=character_list
     )
 
-@app.route('/worlds/<int:id>')
+@app.route('/worlds/<int:id>', methods=['GET', 'POST'])
 def world(id):
     if 'user' not in session:
         return redirect(url_for('login'))
     _world = query("select * from world where id=%s", (id,), False)
     if not _world:
         return 'Not Found',404
+    
+    if request.method == 'POST':
+        form = request.form.to_dict()
+        existing = {"world_id":id}
+        if form['form_name'] == "add_item":
+            return fb.get_form('item_found_in_world', url_for('form', table_name='item_found_in_world'), existing)
+        elif form['form_name'] == "add_race":
+            return fb.get_form('race_lives_in', url_for('form', table_name='race_lives_in'), existing)
     
     _locations = query("select id, name, description, category \
         from location \
