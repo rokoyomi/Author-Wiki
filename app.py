@@ -2,7 +2,6 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from form_builder import form_builder
-from dummydb import db_query, db_join, db_insert, db_update, db_delete
 
 app = Flask(__name__)
 app.secret_key = b'dbJKSwh873y9WPh&*'
@@ -10,19 +9,29 @@ app.secret_key = b'dbJKSwh873y9WPh&*'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'sarim'
 app.config['MYSQL_PASSWORD'] = '12345678'
-app.config['MYSQL_DB'] = 'db_database'
+app.config['MYSQL_DB'] = 'test'
 mysql = MySQL(app)
 fb = form_builder(mysql)
 
-#def query(q : str, t : tuple, l = True):
-#    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#    cur.execute(q, t)
-#    if l:
-#        res = cur.fetchall()
-#    else:
-#        res = cur.fetchone()
-#    cur.close()
-#    return res
+def query(q : str, t : tuple, l = True, d=True):
+    if d:
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    else:
+        cur = mysql.connection.cursor()
+    cur.execute(q, t)
+    if l:
+        res = cur.fetchall()
+    else:
+        res = cur.fetchone()
+    cur.close()
+    return res
+def get_col_names(table_name):
+    col = query("select column_name \
+        from information_schema.columns \
+        where table_schema=%s and table_name=%s order by ordinal_position", 
+        (app.config['MYSQL_DB'], table_name),
+    )
+    return col
 
 @app.route('/', methods=['GET'])
 @app.route('/login', methods=['GET', 'POST'])
@@ -32,15 +41,13 @@ def login():
             return redirect(url_for('profile', id=session['user']['id']))
         return render_template('login.jinja')
 
-    #user = query(
-    #    "SELECT id, concat(first_name, ' ', last_name) as name, email, pen_name \
-    #        FROM author WHERE email = %s",
-    #    (request.form['email'],), False
-    #)
+    user = query(
+        "SELECT id, concat(first_name, ' ', last_name) as name, email, pen_name \
+            FROM author WHERE email = %s", (request.form['email'],), False
+    )
+    print(user)
 
-    user = db_query('author', ['email'], [request.form['email']], False)
-
-    if user == None:
+    if not user:
         flash('An account with that email does not exist')
         return render_template('login.jinja')
     
@@ -49,118 +56,142 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user')
+    if 'user' in session:
+        session.pop('user')
     return redirect(url_for('login'))
 
 @app.route('/user/<int:id>', methods=['GET'])
 def profile(id: int):
+    if 'user' not in session:
+        return redirect(url_for('login'))
     user = session.get('user')
-    
-    #characters = query(
-    #    "SELECT * FROM characters WHERE author_id = %s",
-    #    (cur_id,)
-    #)
-    characters = db_query('characters', ['author_id'], [user['id']])
-    stories = db_query('story', ['author_id'], [user['id']])
-    worlds = db_query('world', ['author_id'], [user['id']])
-    locations = db_query('location', ['author_id'], [user['id']])
-    items = db_query('item', ['author_id'], [user['id']])
-    races = db_query('race', ['author_id'], [user['id']])
-    organizations = db_query('organization', ['author_id'], [user['id']])
+
+    _characters = query("select * from characters where author_id=%s", (user['id'],))
+    _stories = query("select * from story where author_id=%s", (user['id'],))
+    _worlds = query("select * from world where author_id=%s", (user['id'],))
+    _locations = query("select * from location where author_id=%s", (user['id'],))
+    _items = query("select * from item where author_id=%s", (user['id'],))
+    _races = query("select * from race where author_id=%s", (user['id'],))
+    _organizations = query("select * from organization where author_id=%s", (user['id'],))
 
     return render_template('index.jinja', 
-        author=user, characters_list=characters, stories=stories, 
-        worlds=worlds,locations=locations, items=items, races=races, organizations=organizations
+        author=user, characters_list=_characters, stories=_stories, 
+        worlds=_worlds,locations=_locations, items=_items, races=_races, organizations=_organizations
     )
 
 @app.route('/characters/<int:id>')
 def characters(id: int):
-    #chara = query(
-    #    "SELECT * FROM characters WHERE id = %s and author_id = %s",
-    #    (character_id, session['user']['id']), False
-    #)
-
-    _character = db_query('characters', ['id','author_id'], [id, session['user']['id']], False)
-    if _character == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    _character = query("select * from characters where id=%s and author_id=%s", (id, session['user']['id']), False)
+    if not _character:
         return 'Not Found',404
-
-    traits= db_query('traits', ['character_id'], [id])
-    arc_appearances = db_query('appearance', ['character_id'], [id])
-    print(arc_appearances)
-    _arcs = [db_query('arc', ['id'], [appearance['arc_id']], False) for appearance in arc_appearances]
-    _race = db_query('race', ['id'], [_character['race_id']], False)
+    
+    _traits = query("select * from traits where character_id=%s", (id,))
+    _character_appearances = query(
+        "select c.id, c.name, ap.role, ap.role_description, a.story_id, ap.arc_id \
+        from characters c inner join (appearance ap inner join arc a on ap.arc_id=a.id) on c.id=ap.character_id \
+        where c.id=%s", (id,)
+    )
+    _race = query("select id, name from race where id=%s", (_character['race_id'],), False)
 
     return render_template('elements/character.jinja', 
         author= session['user'], element=_character,
-        traits=traits, appearances=db_join(_arcs, arc_appearances), race=_race, table_name='characters'
+        traits=_traits, appearances=_character_appearances, race=_race, table_name='characters'
     )
 
 @app.route('/stories/<int:id>')
 def story(id):
-    s = db_query('story', ['id'], [id], False)
-
-    if s == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    s = query("select * from story where id=%s", (id,), False)
+    if not s:
         return 'Not Found',404
 
-    arcs = db_query('arc', ['story_id'], [id])
+    arcs = query("select * from arc where story_id=%s", (id,))
+    characters = query("select distinct(c.id) as character_id, c.name, c.description as role_description \
+        from characters c inner join (appearance app inner join arc a on app.arc_id=a.id) on app.character_id=c.id\
+        where a.story_id=%s", (id,)
+    )
 
     return render_template('elements/story.jinja', 
-        author=session['user'], element=s, arcs=arcs, table_name='story'
+        author=session['user'], element=s, arcs=arcs, table_name='story', appearances=characters
     )
 
 @app.route('/stories/<int:story_id>/arcs/<int:id>', methods=['GET','POST'])
 def arc(story_id, id):
-    a = db_query('arc', ['id'], [id], False)
-    if a == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    a = query("select * from arc where id=%s", (id,), False)
+    if not a:
         return 'Not Found',404
-    
-    _arc_appearances = db_query('appearance', ['arc_id'], [id])
-    _characters = [db_query('characters', ['id'], [appearance['character_id']], False) for appearance in _arc_appearances]
-    _arc_locations = db_query('arc_occurs_in', ['arc_id'], [id])
-    _locations = [db_query('location', ['id'], [_arc_location['location_id']], False) for _arc_location in _arc_locations]
-    _arc_items = db_query('item_featured_in', ['arc_id'], [id])
-    _items = [db_query('item', ['id'], [_arc_item['item_id']], False) for _arc_item in _arc_items]
 
-    character_list = db_query('characters', ['author_id'], [session['user']['id']])
-    temp = []
-    for i in range(len(character_list)):
-        if character_list[i]['id'] in [ c['id'] for c in _characters]:
-            temp.append(i)
-    temp.reverse()
-    for i in temp:
-        character_list.pop(i)
+    _character_appearances = query("select * \
+        from characters c inner join (appearance app inner join arc a on app.arc_id=a.id) on app.character_id=c.id\
+        where a.id=%s",(id,)
+    )
+    _featured_locations = query("select * \
+        from location l inner join (arc_occurs_in occ inner join arc a on occ.arc_id=a.id) on occ.location_id=l.id\
+        where a.id=%s",(id,)
+    )
+    _featured_items = query("select * \
+        from item i inner join (item_featured_in f inner join arc a on f.arc_id=a.id) on f.item_id=i.id\
+        where a.id=%s",(id,)
+    )
+
+    character_list = query("select id, name \
+        from characters\
+        where author_id=%s and id not in %s", (session['user']['id'], 
+        query("select character_id \
+            from appearance \
+            where arc_id=%s", (id,), d=False) or ((0),) # hack
+        )
+    )
 
     return render_template('elements/arc.jinja', 
-        author=session['user'], element=a, appearances=db_join(_arc_appearances, _characters),
-        locations=_locations, items=_items, table_name='arc', character_list=character_list
+        author=session['user'], element=a, appearances=_character_appearances,
+        locations=_featured_locations, items=_featured_items, table_name='arc', character_list=character_list
     )
 
 @app.route('/worlds/<int:id>')
 def world(id):
-    _world = db_query('world', ['id'], [id], False)
-    if _world == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    _world = query("select * from world where id=%s", (id,), False)
+    if not _world:
         return 'Not Found',404
-
-    _locations = db_query('location', ['world_id'], [id])
-    _world_races = db_query('race_lives_in', ['world_id'], [id])
-    _races = [db_query('race', ['id'], [_race_world['race_id']], False) for _race_world in _world_races]
-    _world_items = db_query('item_found_in_world', ['world_id'], [id])
-    _items = [db_query('item', ['id'], [_world_item['item_id']], False) for _world_item in _world_items]
+    
+    _locations = query("select id, name, description, category \
+        from location \
+        where world_id=%s", (id,)
+    )
+    _races = query("select r.id, r.name, r.description, r.category \
+        from race r inner join (race_lives_in rl inner join world w on rl.world_id=w.id) on rl.race_id=r.id \
+        where w.id=%s", (id,)
+    )
+    _items = query("select i.id, i.name, i.description, i.category \
+        from item i inner join (item_found_in_world ifw inner join world w on ifw.world_id=w.id) on ifw.item_id=i.id \
+        where w.id=%s", (id,)
+    )
 
     return render_template('elements/world.jinja', 
         author=session['user'], element=_world, locations=_locations, 
-        races=db_join(_world_races, _races), items=_items, table_name='world'
+        races=_races, items=_items,
     )
 
 @app.route('/locations/<int:id>')
 def location(id):
-    _location = db_query('location', ['id'], [id], False)
-    if _location == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    _location = query("select * from location where id=%s", (id,), False)
+    if not _location:
         return 'Not Found', 404
     
-    _child_loc = db_query('location', ['location_id'], [id])
-    _location_arcs = db_query('arc_occurs_in', ['location_id'], [id])
-    _arcs = [db_query('arc', ['id'], [_location_arc['arc_id']], False) for _location_arc in _location_arcs]
+    _child_loc = query("select * from location where location_id=%s", (id,))
+    _arcs = query("select a.id, a.name, a.description, a.story_id \
+        from arc a inner join (arc_occurs_in occ inner join location l on occ.location_id=l.id) on occ.arc_id=a.id\
+        where l.id=%s", (id,)
+    )
 
     return render_template('elements/location.jinja',
         author=session['user'], element=_location, locations=_child_loc, arcs=_arcs, table_name='location'
@@ -168,13 +199,17 @@ def location(id):
 
 @app.route('/races/<int:id>')
 def race(id):
-    _race = db_query('race', ['id'], [id], False)
-    if _race == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    _race = query("select * from race where id=%s", (id,), False)
+    if not _race:
         return 'Not Found', 404
     
-    _race_worlds = db_query('race_lives_in', ['race_id'], [id])
-    _worlds = [db_query('world', ['id'], [_race_world['world_id']], False) for _race_world in _race_worlds]
-    _characters = db_query('characters', ['race_id'], [id])
+    _worlds = query("select * \
+        from world w inner join (race_lives_in l inner join race r on l.race_id=r.id) on l.world_id=w.id\
+        where r.id=%s", (id,)
+    )
+    _characters = query("select * from characters where race_id=%s", (id,))
 
     return render_template('elements/race.jinja',
         author=session['user'], element=_race, worlds=_worlds, characters=_characters, table_name='race'
@@ -182,14 +217,20 @@ def race(id):
 
 @app.route('/items/<int:id>')
 def item(id):
-    _item = db_query('item', ['id'], [id], False)
-    if _item == None:
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    _item = query("select * from item where id=%s", (id,), False)
+    if not _item:
         return 'Not Found', 404
     
-    _item_worlds = db_query('item_found_in_world', ['item_id'], [id])
-    _worlds = [db_query('world', ['id'], [item_world['world_id']], False) for item_world in _item_worlds]
-    _item_arcs = db_query('item_featured_in', ['item_id'], [id])
-    _arcs = [db_query('arc', ['id'], [_item_arc['arc_id']], False) for _item_arc in _item_arcs]
+    _worlds = query("select w.id, w.name, w.description \
+        from world w inner join (item_found_in_world ifw inner join item i on ifw.item_id=i.id) on ifw.world_id=w.id\
+        where i.id=%s", (id,)
+    )
+    _arcs = query("select a.id, a.name, a.description, a.story_id \
+        from arc a inner join (item_featured_in ifa inner join item i on ifa.item_id=i.id) on ifa.arc_id=a.id\
+        where i.id=%s", (id,)
+    )
 
     return render_template('elements/item.jinja',
         author=session['user'], element=_item, worlds = _worlds, arcs=_arcs, table_name='item'
@@ -197,7 +238,11 @@ def item(id):
 
 @app.route('/organizations/<int:id>')
 def organization(id):
-    _org = db_query('organization', ['id'], [id], False)
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    _org = query("select * from organization where id=%s", (id,), False)
+    if not _org:
+        return "Not Found",404
 
     return render_template(
         'elements/element_base.jinja', 
@@ -209,26 +254,102 @@ def form(table_name):
     if 'user' not in session:
         return redirect(url_for('login'))
     
+    col_names = get_col_names(table_name)
     if request.method == 'GET':
-        return fb.get_form(table_name, post_addr=url_for('form', table_name=table_name))
+        return render_template(
+            'forms/form.jinja', author=session['user'], table_name=table_name, 
+            columns = col_names, post_addr=url_for('form', table_name=table_name), existing=None
+        )
     
     _form = request.form.to_dict()
     _form['author_id'] = session['user']['id']
 
-    db_insert(table_name, _form)
+    tup = ()
+    for col_name in col_names:
+        if col_name['COLUMN_NAME'] in _form:
+            o = _form[col_name['COLUMN_NAME']]
+            if type(o) is str:
+                o = o.strip()
+                if o == '':
+                    o = None
+            tup += (o,)
+        else:
+            tup += (None,)
+    
+    sql = f"insert into {table_name} values %s"
+    try:
+        query(sql, [tup])
+        mysql.connection.commit()
+    except MySQLdb.Error as e:
+        flash(e.args[1])
+        mysql.connection.rollback()
+        return render_template(
+            'forms/form.jinja', author=session['user'], table_name=table_name, 
+            columns = col_names, post_addr=url_for('form', table_name=table_name), existing=_form
+        )
 
     return redirect(url_for('profile', id=session['user']['id']))
 
 @app.route('/<table_name>/<int:record_id>/update', methods=['GET', 'POST'])
 def update(table_name, record_id):
-    if request.method == 'GET':
-        existing = db_query(table_name, ['id'], [record_id], False)
-        return fb.get_form(table_name, url_for('update', table_name=table_name, record_id=record_id), existing)
+    if 'user' not in session:
+        return redirect(url_for('login'))
     
-    db_update(table_name, record_id, request.form.to_dict())
+    sql = f"select * from {table_name} where id=%s"
+    existing = query(sql, (record_id,), False)
+
+    if request.method == 'GET':
+        if not existing:
+            return "Not Found",404
+        if existing['author_id'] != session['user']['id']:
+            return "Forbidden", 403
+        return render_template(
+            'forms/form.jinja', author=session['user'], table_name=table_name, 
+            columns = get_col_names(table_name), post_addr=url_for('update', 
+            table_name=table_name, record_id=record_id), existing=existing
+        )
+    
+    form = request.form.to_dict()
+    temp = ""
+    tup = ()
+    col_names = get_col_names(table_name)
+    for col_name in col_names:
+        if col_name['COLUMN_NAME'] in form:
+            temp += f"{col_name['COLUMN_NAME']} = %s, "
+            tup += (form[col_name['COLUMN_NAME']],)
+    tup += (record_id,)
+    sql = f"update {table_name} set " + temp.strip(", ") + " where id = %s"
+
+    try:
+        query(sql, tup)
+        mysql.connection.commit()
+    except MySQLdb.Error as e:
+        flash(e.args[1])
+        mysql.connection.rollback()
+        return render_template(
+            'forms/form.jinja', author=session['user'], table_name=table_name, 
+            columns = get_col_names(table_name), post_addr=url_for('update', 
+            table_name=table_name, record_id=record_id), existing=existing
+        )
+
     return redirect(url_for(table_name, id=record_id))
 
 @app.route('/<table_name>/<int:record_id>/delete', methods=['POST'])
 def delete(table_name, record_id):
-    db_delete(table_name, ['id'], [record_id])
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    sql = f"select * from {table_name} where id=%s"
+    existing = query(sql, (record_id,), False)
+    if not existing:
+        return "Not Found",404
+    
+    sql = f"delete from {table_name} where id=%s"
+    
+    try:
+        query(sql, (record_id,))
+        mysql.connection.commit()
+    except MySQLdb.Error as e:
+        flash(e.args[1])
+
     return redirect(url_for('profile', id=session['user']['id']))

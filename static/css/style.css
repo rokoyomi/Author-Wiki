@@ -203,3 +203,7 @@ input {
 textarea {
     font-size: medium;
 }
+
+.alert {
+    color: red;
+}
