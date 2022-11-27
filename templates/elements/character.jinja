@@ -34,9 +34,9 @@
         <p class="heading-2">{{ trait['name'] }}</p>
         <p class="text">{{ trait['description'] }}</p>
         {% endfor %}
-        <div class="list">
-            <a href="/forms/traits/" class="item">+ Add Trait</a>
-        </div>
+        <form class="list" method="post" action="/characters/{{ element['id'] }}">
+            <input type="submit" class="item" value="+ Add">
+        </form>
     </div>
 
     <div class="content-area">

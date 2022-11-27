@@ -79,7 +79,7 @@ def profile(id: int):
         worlds=_worlds,locations=_locations, items=_items, races=_races, organizations=_organizations
     )
 
-@app.route('/characters/<int:id>')
+@app.route('/characters/<int:id>', methods=['GET', 'POST'])
 def characters(id: int):
     if 'user' not in session:
         return redirect(url_for('login'))
@@ -87,9 +87,13 @@ def characters(id: int):
     if not _character:
         return 'Not Found',404
     
+    if request.method == 'POST':
+        existing = {"character_id":id}
+        return fb.get_form('traits', url_for('form', table_name='traits'), existing)
+
     _traits = query("select * from traits where character_id=%s", (id,))
     _character_appearances = query(
-        "select c.id, c.name, ap.role, ap.role_description, a.story_id, ap.arc_id \
+        "select a.name, ap.role, ap.description as role_description, a.story_id, ap.arc_id \
         from characters c inner join (appearance ap inner join arc a on ap.arc_id=a.id) on c.id=ap.character_id \
         where c.id=%s", (id,)
     )
@@ -100,13 +104,17 @@ def characters(id: int):
         traits=_traits, appearances=_character_appearances, race=_race, table_name='characters'
     )
 
-@app.route('/stories/<int:id>')
+@app.route('/stories/<int:id>', methods=['GET', 'POST'])
 def story(id):
     if 'user' not in session:
         return redirect(url_for('login'))
     s = query("select * from story where id=%s", (id,), False)
     if not s:
         return 'Not Found',404
+    
+    if request.method == 'POST':
+        existing = {"story_id":id}
+        return fb.get_form('arc', url_for('form', table_name='arc'), existing)
 
     arcs = query("select * from arc where story_id=%s", (id,))
     characters = query("select distinct(c.id) as character_id, c.name, c.description as role_description \
@@ -125,8 +133,18 @@ def arc(story_id, id):
     a = query("select * from arc where id=%s", (id,), False)
     if not a:
         return 'Not Found',404
+    
+    if request.method == 'POST':
+        form = request.form.to_dict()
+        existing = {"arc_id":id}
+        if form['form_name'] == 'add_character':
+            return fb.get_form('appearance', url_for('form', table_name='appearance'), existing)
+        elif form['form_name'] == 'add_location':
+            return fb.get_form('arc_occurs_in', url_for('form', table_name='arc_occurs_in'), existing)
+        elif form['form_name'] == 'add_item':
+            return fb.get_form('item_featured_in', url_for('form', table_name='item_featured_in'), existing)
 
-    _character_appearances = query("select * \
+    _character_appearances = query("select c.id as character_id, c.name, app.role, app.description as role_description \
         from characters c inner join (appearance app inner join arc a on app.arc_id=a.id) on app.character_id=c.id\
         where a.id=%s",(id,)
     )
@@ -356,3 +374,14 @@ def delete(table_name, record_id):
         flash(e.args[1])
 
     return redirect(url_for('profile', id=session['user']['id']))
+
+@app.route('/characters/<int:id>/<trait_name>')
+def add_trait(id, trait_name):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    existing = query("select * from traits where character_id=%s and name=%s", (id, trait_name))
+    if existing:
+        flash('A trait with that name already exists for this character')
+        return redirect(url_for('characters', id=id))
+    

@@ -1,0 +1,14 @@
+{% extends "forms/form.jinja" %}
+
+{% block child_controls %}
+    <label>
+        <span>Story</span>
+        <select name="story_id" class="form-input">
+            {% for story in story_list %}
+                <option value="{{ story['id'] }}" {% if existing and existing['story_id'] and existing['story_id']|int == story['id'] %}selected="selected"{% endif %}>
+                    {{ story['name'] }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+{% endblock child_controls %}

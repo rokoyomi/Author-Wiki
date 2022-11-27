@@ -1,0 +1,24 @@
+{% extends "forms/form.jinja" %}
+
+{% block child_controls %}
+    <label>
+        <span>Character</span>
+        <select name="character_id" class="form-input">
+            {% for character in character_list %}
+                <option value="{{ character['id'] }}" {% if existing and existing['character_id'] and existing['character_id']|int == character['id'] %}selected="selected"{% endif %}>
+                    {{ character['name'] }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        <span>Arc</span>
+        <select name="arc_id" class="form-input">
+            {% for arc in arc_list %}
+                <option value="{{ arc['id'] }}" {% if existing and existing['arc_id'] and existing['arc_id']|int == arc['id'] %}selected="selected"{% endif %}>
+                    {{ arc['name'] }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+{% endblock child_controls %}

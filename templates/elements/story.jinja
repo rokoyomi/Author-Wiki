@@ -22,9 +22,9 @@
         </div>
         <p class="text">{{ arc['description'] }}</p>
         {% endfor %}
-        <div class="list">
-            <a href="" class="item">+ Add Arc</a>
-        </div>
+        <form class="list" method="post" action="{{ url_for('story', id=element['id']) }}">
+            <input type="submit" class="item" value="+ Add Arc">
+        </form>
     </div>
 
     <div class="content-area">

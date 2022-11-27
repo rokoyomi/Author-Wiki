@@ -1,0 +1,5 @@
+{% extends "forms/form.jinja" %}
+
+{% block child_controls %}
+    <input type="hidden" name="character_id", value="{{ existing['character_id'] }}">
+{% endblock child_controls %}

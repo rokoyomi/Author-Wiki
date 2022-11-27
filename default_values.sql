@@ -25,6 +25,7 @@ select * from location;
 INSERT INTO item(id,author_id,name,rarity,category,description) values (1,1,'Excalibur','Legendary','Weapon','The mythical sword of King Arthur.');
 INSERT INTO item(id,author_id,name,rarity,category,description) values (2,1,'Health Potion','Common','Consumable','Common item easily accessible to most people.');
 INSERT INTO item(id,author_id,name,rarity,category,description) values (3,1,'Zangetsu','Unique','Weapon',"Ichigo Kurosaki's Zanpakuto");
+INSERT INTO item(id,author_id,name,rarity,category,description) values (4,1,'Zanpakuto','Rare','Weapon',"The weapon of the Soul Reapers");
 select * from item;
 INSERT INTO organization(id,author_id,leader_id,base_location_id,name,description) values (1,1,1,1,'13 Court Guard Squads','The guardians of Soul Society. They reside in the Sereitei and maintain the baance of Souls between the World of the Living and Soul Society');
 select * from organization;

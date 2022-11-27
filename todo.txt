@@ -1,6 +1,7 @@
 -- NOW --
 make drop-down based forms to link entities via bridge tables
 make forms to input attribute-type entities
+make all forms post to current page instead of directly to insert/update/delete
 make remove buttons work
 
 -- NEXT --

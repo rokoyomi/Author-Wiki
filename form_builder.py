@@ -15,15 +15,20 @@ class form_builder:
             'world':self.world_form,
             'organization':self.organization_form,
             'traits':self.trait_form,
+            'appearance':self.appearance_form,
+            'item_featured_in':self.item_feature_form,
+            'arc_occurs_in':self.arc_location_form,
         }
     
     def get_form(self, table_name, post_addr, existing=None):
         return self.mapper[table_name](table_name, post_addr, existing)
 
     def arc_form(self, table_name, post_addr, existing):
+        story_list = self.query("select id, name from story where author_id=%s",(session['user']['id'],))
         return render_template(
-            'forms/form.jinja', author=session['user'], table_name=table_name, 
-            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing
+            'forms/arc_form.jinja', author=session['user'], table_name=table_name, 
+            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
+            story_list=story_list
         )
     def character_form(self, table_name, post_addr, existing):
         race_list = self.query('select id, name from race where author_id=%s',(session['user']['id'],))
@@ -69,8 +74,32 @@ class form_builder:
         )
     def trait_form(self, table_name, post_addr, existing):
         return render_template(
-            'forms/form.jinja', author=session['user'], table_name=table_name, 
+            'forms/traits_form.jinja', author=session['user'], table_name=table_name, 
             columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing
+        )
+    def appearance_form(self, table_name, post_addr, existing):
+        arc_list = self.query("select a.id, a.name from arc a inner join story s on a.story_id = s.id where s.author_id=%s", (session['user']['id'],))
+        character_list = self.query("select id, name from characters where author_id=%s", (session['user']['id'],))
+        return render_template(
+            'forms/appearance_form.jinja', author=session['user'], table_name=table_name, 
+            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
+            arc_list=arc_list, character_list=character_list
+        )
+    def item_feature_form(self, table_name, post_addr, existing):
+        arc_list = self.query("select a.id, a.name from arc a inner join story s on a.story_id = s.id where s.author_id=%s", (session['user']['id'],))
+        item_list = self.query("select id, name from item where author_id=%s", (session['user']['id'],))
+        return render_template(
+            'forms/item_feature_form.jinja', author=session['user'], table_name=table_name, 
+            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
+            arc_list=arc_list, item_list=item_list
+        )
+    def arc_location_form(self, table_name, post_addr, existing):
+        arc_list = self.query("select a.id, a.name from arc a inner join story s on a.story_id = s.id where s.author_id=%s", (session['user']['id'],))
+        location_list = self.query("select id, name from location where author_id=%s", (session['user']['id'],))
+        return render_template(
+            'forms/arc_location_form.jinja', author=session['user'], table_name=table_name, 
+            columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
+            arc_list=arc_list, location_list=location_list
         )
     
     def query(self, q : str, t : tuple, l = True, d=True):

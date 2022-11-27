@@ -48,7 +48,8 @@ CREATE TABLE traits(
     character_id int not null,
     name varchar(20) not null,
     description text,
-    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(character_id, name)
 );
 CREATE TABLE world(
     id int primary key auto_increment,
@@ -91,30 +92,36 @@ CREATE TABLE appearance(
     character_id int not null,
     arc_id int not null,
     role varchar(40),
-    role_description text,
+    description text,
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (arc_id) REFERENCES arc(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (arc_id) REFERENCES arc(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(character_id, arc_id)
 );
 CREATE TABLE item_featured_in (
     item_id int not null,
     arc_id int not null,
     FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (arc_id) REFERENCES arc(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (arc_id) REFERENCES arc(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(item_id, arc_id)
 );
 CREATE TABLE arc_occurs_in (
     arc_id int not null,
     location_id int not null,
     FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (arc_id) REFERENCES arc(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (arc_id) REFERENCES arc(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(arc_id, location_id)
 );
 CREATE TABLE race_lives_in (
     race_id int not null,
     world_id int not null,
     FOREIGN KEY (race_id) REFERENCES race(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (world_id) REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (world_id) REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(race_id, world_id)
 );
 CREATE TABLE item_found_in_world (
-    item_id int not null,world_id int not null,
+    item_id int not null,
+    world_id int not null,
     FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (world_id) REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (world_id) REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(item_id, world_id)
 );
