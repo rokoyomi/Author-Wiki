@@ -44,10 +44,11 @@ class form_builder:
         )
     def location_form(self, table_name, post_addr, existing):
         location_list = self.query('select id, name from location where author_id=%s',(session['user']['id'],))
+        world_list = self.query('select id, name from world where author_id=%s', (session['user']['id'],))
         return render_template(
             'forms/location_form.jinja', author=session['user'], table_name=table_name, 
             columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
-            location_list=location_list
+            location_list=location_list, world_list=world_list
         )
     def race_form(self, table_name, post_addr, existing):
         return render_template(

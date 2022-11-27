@@ -2,11 +2,23 @@
 
 {% block child_controls %}
     <label>
+        <span>World</span>
+        <select name="world_id" class="form-input">
+            {% for world in world_list %}
+                <option value="{{ world['id'] }}" {% if existing and existing['world_id'] and existing['world_id']|int == world['id'] %}selected="selected"{% endif %}>
+                    {{ world['name'] }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
         <span>Parent Location</span>
         <select name="location_id" class="form-input">
             <option value='0'>None</option>
             {% for location in location_list %}
-                <option value="{{ location['id'] }}">{{ location['name'] }}</option>
+                <option value="{{ location['id'] }}" {% if existing and existing['location_id'] and existing['location_id']|int == location['id'] %}selected="selected"{% endif %}>
+                    {{ location['name'] }}
+                </option>
             {% endfor %}
         </select>
     </label>
