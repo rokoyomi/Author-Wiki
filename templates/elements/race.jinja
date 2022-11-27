@@ -3,27 +3,21 @@
 {% block content %}
     <div class="content-area">
         <h1 class="heading">Inhabited Worlds</h1>
+        <div>
         {% for world in worlds %}
-            <div class="flex-area flex-align-center flex-justify-sp-bw">
-                <div>
-                    <a href="{{ url_for('world', id=world['id']) }}" class="heading-2">{{ world['name'] }}</a>
-                </div>
-                <a href="" class="item">Remove</a>
-            </div>
+            <a href="{{ url_for('world', id=world['id']) }}" class="heading-2">{{ world['name'] }}</a>
             <p class="text">{{ world['description'] }}</p>
         {% endfor %}
+        </div>
     </div>
 
     <div class="content-area">
         <h1 class="heading">Characters From this Race</h1>
+        <div>
         {% for character in characters %}
-            <div class="flex-area flex-align-center flex-justify-sp-bw">
-                <div>
-                    <a href="{{ url_for('characters', id=character['id']) }}" class="heading-2">{{ character['name'] }}</a>
-                </div>
-                <a href="" class="item">Remove</a>
-            </div>
+            <a href="{{ url_for('characters', id=character['id']) }}" class="heading-2">{{ character['name'] }}</a>
             <p class="text">{{ character['description'] }}</p>
         {% endfor %}
+        </div>
     </div>
 {% endblock content %}

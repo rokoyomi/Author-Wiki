@@ -3,28 +3,21 @@
 {% block content %}
     <div class="content-area">
         <h1 class="heading">Child Locations</h1>
+        <div>
         {% for location in locations %}
-            <div class="flex-area flex-align-center flex-justify-sp-bw">
-                <div>
-                    <a href="{{ url_for('location', id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
-                    <span class="text">{{ location['category'] }}</span>
-                </div>
-                <a href="" class="item">Remove</a>
-            </div>
+            <a href="{{ url_for('location', id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
+            <span class="text">{{ location['category'] }}</span>
             <p class="text">{{ location['description'] }}</p>
         {% endfor %}
+        </div>
     </div>
     <div class="content-area">
         <h1 class="heading">Arcs in this Location</h1>
+        <div>
         {% for arc in arcs %}
-            <div class="flex-area flex-align-center flex-justify-sp-bw">
-                <div>
-                    <a href="{{ url_for('arc', story_id=arc['story_id'], id=arc['id']) }}" class="heading-2">{{ arc['name'] }}</a>
-                    <span class="text">{{ arc['category'] }}</span>
-                </div>
-                <a href="" class="item">Remove</a>
-            </div>
+            <a href="{{ url_for('arc', story_id=arc['story_id'], id=arc['id']) }}" class="heading-2">{{ arc['name'] }}</a>
             <p class="text">{{ arc['description'] }}</p>
         {% endfor %}
+        </div>
     </div>
 {% endblock content %}
