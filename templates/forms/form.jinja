@@ -3,6 +3,7 @@
 {% block main %}
 <div class="content-area">
     <h1 class="heading">Add a {{ table_name }}</h1>
+    <p class="text alert">{{ get_flashed_messages()[0] }}</p>
     <form action="{{ post_addr }}" method="post" class="text capitalize flex-area flex-vertical">
         <div class="flex-area flex-wrap">
             {% for column in columns %}
@@ -13,6 +14,7 @@
                     </label>
                 {% endif %}
             {% endfor %}
+            {% block child_controls %}{% endblock child_controls %}
         </div>
         <label>
             <span>Description:</span>

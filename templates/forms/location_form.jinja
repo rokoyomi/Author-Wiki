@@ -1,0 +1,13 @@
+{% extends "forms/form.jinja" %}
+
+{% block child_controls %}
+    <label>
+        <span>Parent Location</span>
+        <select name="location_id" class="form-input">
+            <option value='0'>None</option>
+            {% for location in location_list %}
+                <option value="{{ location['id'] }}">{{ location['name'] }}</option>
+            {% endfor %}
+        </select>
+    </label>
+{% endblock child_controls %}

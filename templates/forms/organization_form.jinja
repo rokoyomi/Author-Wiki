@@ -1,0 +1,20 @@
+{% extends "forms/form.jinja" %}
+
+{% block child_controls %}
+    <label>
+        <span>Leader</span>
+        <select name="leader_id" class="form-input">
+            {% for character in character_list %}
+                <option value="{{ character['id'] }}">{{ character['name'] }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        <span>Base Location</span>
+        <select name="base_location_id" class="form-input">
+            {% for location in location_list %}
+                <option value="{{ location['id'] }}">{{ location['name'] }}</option>
+            {% endfor %}
+        </select>
+    </label>
+{% endblock child_controls %}

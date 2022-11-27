@@ -11,7 +11,7 @@ app.config['MYSQL_USER'] = 'sarim'
 app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'test'
 mysql = MySQL(app)
-fb = form_builder(mysql)
+fb = form_builder(mysql, app.config['MYSQL_DB'])
 
 def query(q : str, t : tuple, l = True, d=True):
     if d:
@@ -66,13 +66,13 @@ def profile(id: int):
         return redirect(url_for('login'))
     user = session.get('user')
 
-    _characters = query("select * from characters where author_id=%s", (user['id'],))
-    _stories = query("select * from story where author_id=%s", (user['id'],))
-    _worlds = query("select * from world where author_id=%s", (user['id'],))
-    _locations = query("select * from location where author_id=%s", (user['id'],))
-    _items = query("select * from item where author_id=%s", (user['id'],))
-    _races = query("select * from race where author_id=%s", (user['id'],))
-    _organizations = query("select * from organization where author_id=%s", (user['id'],))
+    _characters = query("select * from characters where author_id=%s", (id,))
+    _stories = query("select * from story where author_id=%s", (id,))
+    _worlds = query("select * from world where author_id=%s", (id,))
+    _locations = query("select * from location where author_id=%s", (id,))
+    _items = query("select * from item where author_id=%s", (id,))
+    _races = query("select * from race where author_id=%s", (id,))
+    _organizations = query("select * from organization where author_id=%s", (id,))
 
     return render_template('index.jinja', 
         author=user, characters_list=_characters, stories=_stories, 
@@ -256,10 +256,7 @@ def form(table_name):
     
     col_names = get_col_names(table_name)
     if request.method == 'GET':
-        return render_template(
-            'forms/form.jinja', author=session['user'], table_name=table_name, 
-            columns = col_names, post_addr=url_for('form', table_name=table_name), existing=None
-        )
+        return fb.get_form(table_name, url_for('form', table_name=table_name))
     
     _form = request.form.to_dict()
     _form['author_id'] = session['user']['id']
@@ -267,7 +264,11 @@ def form(table_name):
     tup = ()
     for col_name in col_names:
         if col_name['COLUMN_NAME'] in _form:
-            o = _form[col_name['COLUMN_NAME']]
+            cn = col_name['COLUMN_NAME']
+            if (cn == 'location_id' or cn == 'race_id') and _form[cn] == '0':
+                tup += (None,)
+                continue
+            o = _form[cn]
             if type(o) is str:
                 o = o.strip()
                 if o == '':
@@ -283,10 +284,7 @@ def form(table_name):
     except MySQLdb.Error as e:
         flash(e.args[1])
         mysql.connection.rollback()
-        return render_template(
-            'forms/form.jinja', author=session['user'], table_name=table_name, 
-            columns = col_names, post_addr=url_for('form', table_name=table_name), existing=_form
-        )
+        return fb.get_form(table_name, url_for('form', table_name=table_name), _form)
 
     return redirect(url_for('profile', id=session['user']['id']))
 
@@ -303,11 +301,8 @@ def update(table_name, record_id):
             return "Not Found",404
         if existing['author_id'] != session['user']['id']:
             return "Forbidden", 403
-        return render_template(
-            'forms/form.jinja', author=session['user'], table_name=table_name, 
-            columns = get_col_names(table_name), post_addr=url_for('update', 
-            table_name=table_name, record_id=record_id), existing=existing
-        )
+        return fb.get_form(table_name, 
+            url_for('update', table_name=table_name, record_id=record_id), existing)
     
     form = request.form.to_dict()
     temp = ""
@@ -315,8 +310,17 @@ def update(table_name, record_id):
     col_names = get_col_names(table_name)
     for col_name in col_names:
         if col_name['COLUMN_NAME'] in form:
-            temp += f"{col_name['COLUMN_NAME']} = %s, "
-            tup += (form[col_name['COLUMN_NAME']],)
+            cn = col_name['COLUMN_NAME']
+            temp += f"{cn} = %s, "
+            if (cn == 'location_id' or cn == 'race_id') and form[cn] == '0':
+                tup += (None,)
+                continue
+            o = form[cn]
+            if type(o) == str:
+                o = o.strip()
+                if o == '':
+                    o = None 
+            tup += (o,)
     tup += (record_id,)
     sql = f"update {table_name} set " + temp.strip(", ") + " where id = %s"
 
@@ -326,11 +330,8 @@ def update(table_name, record_id):
     except MySQLdb.Error as e:
         flash(e.args[1])
         mysql.connection.rollback()
-        return render_template(
-            'forms/form.jinja', author=session['user'], table_name=table_name, 
-            columns = get_col_names(table_name), post_addr=url_for('update', 
-            table_name=table_name, record_id=record_id), existing=existing
-        )
+        return fb.get_form(table_name, 
+            url_for('update', table_name=table_name, record_id=record_id), existing)
 
     return redirect(url_for(table_name, id=record_id))
 
@@ -343,6 +344,8 @@ def delete(table_name, record_id):
     existing = query(sql, (record_id,), False)
     if not existing:
         return "Not Found",404
+    if existing['author_id'] != session['user']['id']:
+        return "Forbidden",403
     
     sql = f"delete from {table_name} where id=%s"
     
