@@ -6,10 +6,11 @@ make remove buttons work
 -- NEXT --
 link organization to location (base location)
 link organization to character (leader)
+signup page
+trigger fr user statistics
+trigger for parent location deletion
 
 -- LATER --
-replace dummy queries with actual db queries
-updates should cascade
 deletes should set default (mostly)
 
 -- WAY LATER --
@@ -17,3 +18,20 @@ optionally remove story_id from the arc links
 add category attributes to most entities
 add descriptions to bridge tables
 improve ui
+
+-- CODEBASE IMPROVEMENT IDEAS --
+don't pass in user and table name to every template
+remove unnecessary parameters from query function
+beter table names
+
+-- QUERY/SYSTEM IMPROVEMENTS --
+only select variables that are needed
+don't show characters already assigned to arc
+don't show locations assigned to worlds
+don't show locations that have parent locations in worlds
+world and story as the central entitie after author, you addother entities to them
+
+-- WEIRD BEHAVIOURS--
+-- SAFE -- 
+if a user tries to add an element on another's profile, it adds it to their own profile instead
+-- UNSAFE --
