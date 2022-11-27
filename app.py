@@ -382,14 +382,3 @@ def delete(table_name, record_id):
         flash(e.args[1])
 
     return redirect(url_for('profile', id=session['user']['id']))
-
-@app.route('/characters/<int:id>/<trait_name>')
-def add_trait(id, trait_name):
-    if 'user' not in session:
-        return redirect(url_for('login'))
-
-    existing = query("select * from traits where character_id=%s and name=%s", (id, trait_name))
-    if existing:
-        flash('A trait with that name already exists for this character')
-        return redirect(url_for('characters', id=id))
-    
