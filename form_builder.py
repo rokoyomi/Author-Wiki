@@ -20,6 +20,7 @@ class form_builder:
             'arc_occurs_in':self.arc_location_form,
             'item_found_in_world':self.world_item_form,
             'race_lives_in':self.race_world_form,
+            'author':self.user_form,
         }
     
     def get_form(self, table_name, post_addr, existing=None):
@@ -119,6 +120,15 @@ class form_builder:
             'forms/race_world_form.jinja', author=session['user'], table_name=table_name, 
             columns = self.get_col_names(table_name), post_addr=post_addr, existing=existing,
             world_list=world_list, race_list=race_list
+        )
+    def user_form(self, table_name, post_addr, existing):
+        columns = [
+            {"COLUMN_NAME":"first_name"},{"COLUMN_NAME":"last_name"},{"COLUMN_NAME":"email"},
+            {"COLUMN_NAME":"password"},{"COLUMN_NAME":"pen_name"},
+        ]
+        return render_template(
+            'forms/form.jinja', table_name=table_name, 
+            columns=columns, post_addr=post_addr, existing=existing,
         )
     
     def query(self, q : str, t : tuple, l = True, d=True):

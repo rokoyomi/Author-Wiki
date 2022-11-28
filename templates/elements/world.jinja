@@ -5,16 +5,13 @@
 {% block content %}
     <div class="content-area">
         <h1 class="heading">Notable Locations</h1>
+        <div>
         {% for location in locations %}
-            <div class="flex-area flex-align-center flex-justify-sp-bw">
-                <div>
-                    <a href="{{ url_for('location', id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
-                    <span class="text">{{ location['category'] }}</span>
-                </div>
-                <a href="" class="item">Remove</a>
-            </div>
+            <a href="{{ url_for('location', id=location['id']) }}" class="heading-2">{{ location['name'] }}</a>
+            <span class="text">{{ location['category'] }}</span>
             <p class="text">{{ location['description'] }}</p>
         {% endfor %}
+        </div>
     </div>
     <div class="content-area">
         <h1 class="heading">Notable Races</h1>
@@ -24,7 +21,15 @@
                     <a href="{{ url_for('race', id=race['id']) }}" class="heading-2">{{ race['name'] }}</a>
                     <span class="text">{{ race['category'] }}</span>
                 </div>
-                <a href="" class="item">Remove</a>
+                
+                <form action="{{ url_for('delete_mtm_relation', table_name='race_lives_in') }}" method="post">
+                    <input type="hidden" name="id1_name" value="race_id">
+                    <input type="hidden" name="id2_name" value="world_id">
+                    <input type="hidden" name="race_id" value="{{ race['id'] }}">
+                    <input type="hidden" name="world_id" value="{{ element['id'] }}">
+                    <input type="hidden" name="avtn" value="race">
+                    <input type="submit" value="Remove" class="item">
+                </form>
             </div>
             <p class="text">{{ race['description'] }}</p>
         {% endfor %}
@@ -45,7 +50,15 @@
                     <span class="text">{{ item['rarity'] }}</span>
                     <span class="text">{{ item['category'] }}</span>
                 </div>
-                <a href="" class="item">Remove</a>
+
+                <form action="{{ url_for('delete_mtm_relation', table_name='item_found_in_world') }}" method="post">
+                    <input type="hidden" name="id1_name" value="item_id">
+                    <input type="hidden" name="id2_name" value="world_id">
+                    <input type="hidden" name="item_id" value="{{ item['id'] }}">
+                    <input type="hidden" name="world_id" value="{{ element['id'] }}">
+                    <input type="hidden" name="avtn" value="item">
+                    <input type="submit" value="Remove" class="item">
+                </form>
             </div>
             <p class="text">{{ item['description'] }}</p>
         {% endfor %}

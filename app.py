@@ -54,6 +54,26 @@ def login():
     session['user'] = user
     return redirect(url_for('profile', id=user['id']))
 
+@app.route('/signup', methods=['GET','POST'])
+def signup():
+    if 'user' in session:
+        return redirect(url_for('profile', id=session['user']['id']))
+    if request.method == 'GET':
+        return fb.get_form('author', url_for('signup'))
+    
+    form = request.form.to_dict()
+    try:
+        print(hash(form['password']) % 2147483647)
+        query('insert into author values (%s,%s,%s,%s,%s,%s)', 
+            (None, form['first_name'], form['last_name'], form['email'],
+            hash(form['password']) % 2147483647, form['pen_name'])
+        )
+        mysql.connection.commit()
+    except MySQLdb.Error as e:
+        flash(e.args[1])
+        return fb.get_form('author', url_for('signup'), existing=form)
+    return redirect(url_for('login'))
+
 @app.route('/logout')
 def logout():
     if 'user' in session:
@@ -431,3 +451,69 @@ def delete_trait(id, name):
     query("delete from traits where character_id=%s and name=%s", (id, name))
     mysql.connection.commit()
     return redirect(url_for('characters', id=id))
+
+@app.route('/story/<int:story_id>/arcs/<int:id>/update', methods=['GET', 'POST'])
+def update_arc(story_id, id):
+    if not 'user' in session:
+        return redirect(url_for('login'))
+    
+    existing = query("select * from arc where id = %s", (id,), False)
+    if not existing:
+        return "Not Found",404
+    _story = query("select author_id from story where id=%s", (story_id,), False)
+    if _story['author_id'] != session['user']['id']:
+        return "Forbidden",403
+    
+    if request.method == "GET":
+        return fb.get_form("arc", url_for("update_arc", story_id=story_id, id=id), existing=existing)
+    
+    _form = request.form
+    try:
+        query("update arc set story_id=%s, name=%s, description=%s where id=%s", (_form['story_id'], _form['name'], _form['description'], id))
+        mysql.connection.commit()
+    except MySQLdb.Error as e:
+        flash(e.args[1])
+        return fb.get_form("arc", url_for("update_arc", story_id=story_id, id=id), existing=existing)
+    return redirect(url_for("arc", story_id=story_id, id=id))
+
+@app.route('/stories/<int:story_id>/arcs/<int:id>/delete', methods=['POST'])
+def delete_arc(story_id, id):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    existing = query("select * from arc where id=%s", (id,), False)
+    if not existing:
+        return "Not Found",404
+    _story = query("select * from story where id=%s", (story_id,), False)
+    if _story['author_id'] != session['user']['id']:
+        return "Forbidden",403
+    
+    query("delete from arc where id=%s", (id,))
+    mysql.connection.commit()
+    return redirect(url_for("story", id=story_id))
+
+@app.route('/<table_name>/delete', methods=['POST'])
+def delete_mtm_relation(table_name):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    print('a')
+    _form = request.form.to_dict()
+    param1_name = _form['id1_name'] # id for currently open page's table
+    param2_name = _form['id2_name']
+    param1 = _form[param1_name]
+    param2 = _form[param2_name]
+    avtn = _form['avtn']
+
+    existing = query(
+        f"select * from {table_name} where {param1_name}=%s and {param2_name}=%s", (param1, param2), False
+    )
+    if not existing:
+        return "Not Found",404
+    author = query(f"select author_id from {avtn} where id=%s", (param1,), False)
+    if author['author_id'] != session['user']['id']:
+        return "Forbidden",403
+
+    query(f"delete from {table_name} where {param1_name}=%s and {param2_name}=%s", (param1, param2))
+    mysql.connection.commit()
+    return redirect(url_for('profile', id=session['user']['id']))
