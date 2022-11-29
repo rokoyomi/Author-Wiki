@@ -125,3 +125,51 @@ CREATE TABLE item_found_in_world (
     FOREIGN KEY (world_id) REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(item_id, world_id)
 );
+
+-- arc_item is a table that functions as a materialized view andd stores the result of joining the arc and item tables using the arc_featured_in table
+-- this is done as MySQL doesn't support materialized view
+-- the triggers below the table are used to dynamically update the table as needed
+-- only situations that can actually arise from the system have associated triggers
+-- identical "views" and triggers could be made for all the many-many relation in the system
+-- but this serves as a demo of what it would look like
+-- the items shown on the bottom of the arc page are retrieved from this view
+
+create table arc_item as 
+    select a.id as arc_id, i.id as item_id, a.name as arc_name, i.name as item_name, a.description as arc_description, i.description as item_description, i.rarity as item_rarity, i.category as item_category, author_id 
+    from arc a inner join (item_featured_in ai inner join item i on ai.item_id=i.id) on ai.arc_id=a.id;
+
+delimiter //
+
+create trigger insert_arc_item_mv
+after insert on item_featured_in
+for each row
+begin
+	insert into arc_item (select a.id, i.id, a.name, i.name, a.description, i.description, i.rarity, i.category, author_id from arc a inner join (item_featured_in ai inner join item i on ai.item_id=i.id) on ai.arc_id=a.id where a.id=new.arc_id and i.id=new.item_id);
+end; //
+
+create trigger delete_arc_item_mv
+after delete on item_featured_in
+for each row
+begin
+	delete from arc_item where arc_id=old.arc_id and item_id=old.item_id;
+end; //
+
+create trigger arc_update
+after update on arc
+for each row
+begin
+	update arc_item set arc_name=new.name, arc_description=new.description where arc_id=new.id;
+end; //
+
+create trigger item_update
+after update on item
+for each row
+begin
+	update arc_item 
+	set item_name=new.name, item_description=new.description, item_rarity=new.rarity, item_category=new.category
+	where item_id=new.id;
+end; //
+
+
+
+

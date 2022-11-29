@@ -180,10 +180,11 @@ def arc(story_id, id):
         from location l inner join (arc_occurs_in occ inner join arc a on occ.arc_id=a.id) on occ.location_id=l.id\
         where a.id=%s",(id,)
     )
-    _featured_items = query("select * \
-        from item i inner join (item_featured_in f inner join arc a on f.arc_id=a.id) on f.item_id=i.id\
-        where a.id=%s",(id,)
-    )
+    #_featured_items = query("select * \
+    #    from item i inner join (item_featured_in f inner join arc a on f.arc_id=a.id) on f.item_id=i.id\
+    #    where a.id=%s",(id,)
+    #)
+    _featured_items = query("select item_id as id, arc_id, item_name as name, item_description as description, item_category as category, item_rarity as rarity from arc_item where arc_id = %s", (id,))
 
     character_list = query("select id, name \
         from characters\
