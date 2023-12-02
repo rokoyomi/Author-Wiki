@@ -1,3 +1,5 @@
+CREATE DATABASE author_wiki;
+USE author_wiki;
 CREATE TABLE author (
     id int primary key auto_increment,
     first_name  varchar(30),

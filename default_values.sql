@@ -1,3 +1,4 @@
+use author_wiki;
 INSERT INTO author(id,first_name,last_name,email,pen_name) values (1,'tite','kuba','kubo@example.com','Tite Kubo');
 select * from author;
 INSERT INTO story(id,author_id,name,status,description) values(1,1,'Bleach','Ongoing',"Bleach (stylized as BLEACH) is a Japanese manga series written and illustrated by Tite Kubo. It follows the adventures of a teenager Ichigo Kurosaki, who inherits his parents' destiny after he obtains the powers of a Soul Reaper—a death personification similar to the Grim Reaper—from another Soul Reaper, Rukia Kuchiki.");
@@ -29,8 +30,8 @@ INSERT INTO item(id,author_id,name,rarity,category,description) values (4,1,'Zan
 select * from item;
 INSERT INTO organization(id,author_id,leader_id,base_location_id,name,description) values (1,1,1,1,'13 Court Guard Squads','The guardians of Soul Society. They reside in the Sereitei and maintain the baance of Souls between the World of the Living and Soul Society');
 select * from organization;
-INSERT INTO appearance(character_id,arc_id,role,role_description) values(1,1,'Minor Antagonist',"Yamamoto is the pillar of Soul Society. When Ichigo and friends attack, he gives the command to hunt them down. But he ultimately plays no significant role");
-INSERT INTO appearance(character_id,arc_id,role,role_description) values(2,1,'Protagonist','Ichigo and Friends invade the Soul Society to save Rukia.');
+INSERT INTO appearance(character_id,arc_id,role,description) values(1,1,'Minor Antagonist',"Yamamoto is the pillar of Soul Society. When Ichigo and friends attack, he gives the command to hunt them down. But he ultimately plays no significant role");
+INSERT INTO appearance(character_id,arc_id,role,description) values(2,1,'Protagonist','Ichigo and Friends invade the Soul Society to save Rukia.');
 select * from appearance;
 INSERT INTO item_featured_in(item_id,arc_id) values (3,1);
 select * from item_featured_in;
