@@ -27,8 +27,9 @@ DB = author_wiki
 ```
 Run the two provided scripts to initialize the database
 ```
-mysql -u <user> -p<password> schema.sql
-mysql -u <user> -p<password> default_values.sql
+mysql -u <user> -p
+source schema.sql
+source default_values.sql
 ```
 **Notes:**
 - Make sure that your user has permissions to create databases.
