@@ -2,14 +2,18 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from form_builder import form_builder
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 app = Flask(__name__)
 app.secret_key = b'dbJKSwh873y9WPh&*'
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'sarim'
-app.config['MYSQL_PASSWORD'] = '12345678'
-app.config['MYSQL_DB'] = 'test'
+app.config['MYSQL_HOST'] = config.get('MYSQL', 'HOST')
+app.config['MYSQL_USER'] = config.get('MYSQL', 'USER')
+app.config['MYSQL_PASSWORD'] = config.get('MYSQL', 'PASSWORD')
+app.config['MYSQL_DB'] = config.get('MYSQL', 'DB')
 mysql = MySQL(app)
 fb = form_builder(mysql, app.config['MYSQL_DB'])
 
