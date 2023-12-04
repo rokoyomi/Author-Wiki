@@ -4,6 +4,7 @@ import MySQLdb.cursors
 from form_builder import form_builder
 import configparser
 from hashlib import sha256
+from flask_wtf.csrf import CSRFProtect
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -16,6 +17,7 @@ app.config['MYSQL_USER'] = config.get('MYSQL', 'USER')
 app.config['MYSQL_PASSWORD'] = config.get('MYSQL', 'PASSWORD')
 app.config['MYSQL_DB'] = config.get('MYSQL', 'DB')
 mysql = MySQL(app)
+csrf = CSRFProtect(app)
 fb = form_builder(mysql, app.config['MYSQL_DB'])
 
 def query(q : str, t : tuple, l = True, d=True):

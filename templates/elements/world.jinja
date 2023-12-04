@@ -23,6 +23,7 @@
                 </div>
                 
                 <form action="{{ url_for('delete_mtm_relation', table_name='race_lives_in') }}" method="post">
+                    <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                     <input type="hidden" name="id1_name" value="race_id">
                     <input type="hidden" name="id2_name" value="world_id">
                     <input type="hidden" name="race_id" value="{{ race['id'] }}">
@@ -35,6 +36,7 @@
         {% endfor %}
 
         <form method="post" action="{{ url_for('world', id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             <input type="hidden" name="form_name" value="add_race">
             <p class="list">
                 <input type="submit" class="item" value="+ Add">
@@ -52,6 +54,7 @@
                 </div>
 
                 <form action="{{ url_for('delete_mtm_relation', table_name='item_found_in_world') }}" method="post">
+                    <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                     <input type="hidden" name="id1_name" value="item_id">
                     <input type="hidden" name="id2_name" value="world_id">
                     <input type="hidden" name="item_id" value="{{ item['id'] }}">
@@ -64,6 +67,7 @@
         {% endfor %}
 
         <form method="post" action="{{ url_for('world', id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             <input type="hidden" name="form_name" value="add_item">
             <p class="list">
                 <input type="submit" class="item" value="+ Add">

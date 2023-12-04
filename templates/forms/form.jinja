@@ -5,6 +5,7 @@
     <h1 class="heading">Add a {{ table_name }}</h1>
     <p class="text alert">{{ get_flashed_messages()[0] }}</p>
     <form action="{{ post_addr }}" method="post" class="text capitalize flex-area flex-vertical">
+        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
         <div class="flex-area flex-wrap">
             {% for column in columns %}
                 {% if '_id' not in column['COLUMN_NAME'] and 'description' != column['COLUMN_NAME'] and 'id' != column['COLUMN_NAME'] %}

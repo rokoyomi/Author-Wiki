@@ -4,6 +4,7 @@
     <div class="content-area">
         <h1 class="heading">Login</h1>
         <form action="/login" method="post" class="text">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             {% with messages = get_flashed_messages() %}
                 {% for msg in messages %}
                     <p>{{ msg }}</p>

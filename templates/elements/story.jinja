@@ -18,6 +18,7 @@
         <p class="text">{{ arc['description'] }}</p>
         {% endfor %}
         <form class="list" method="post" action="{{ url_for('story', id=element['id']) }}">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             <input type="submit" class="item" value="+ Add Arc">
         </form>
     </div>

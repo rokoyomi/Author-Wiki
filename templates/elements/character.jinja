@@ -35,11 +35,13 @@
                 <span class="heading-2">{{ trait['name'] }}</span>
                 <div>
                     <form action="/characters/{{ element['id'] }}" method="post" class="block">
+                        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                         <input type="hidden" name="form_name" value="update_trait">
                         <input type="hidden" name="name" value="{{ trait['name'] }}">
                         <input type="submit" class="item" value="Update">
                     </form>
                     <form action="{{ url_for('delete_trait', id=element['id'], name=trait['name']) }}" method="post" class="block">
+                        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                         <input type="hidden" name="form_name" value="remove_trait">
                         <input type="hidden" name="name" value="{{ trait['name'] }}">
                         <input type="submit" class="item" value="Remove">
@@ -49,6 +51,7 @@
             <p class="text">{{ trait['description'] }}</p>
         {% endfor %}
         <form class="list" method="post" action="/characters/{{ element['id'] }}">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             <input type="hidden" name="form_name" value="add_trait">
             <input type="submit" class="item" value="+ Add">
         </form>

@@ -10,6 +10,7 @@
             <div>
             {% block update_delete_btns %}
                 <form action="{{ url_for('delete', table_name=table_name, record_id=element['id']) }}", method="post">
+                    <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                     <a href="{{ url_for('update', table_name=table_name, record_id=element['id']) }}" class="item">Update</a>
                     <input type="submit" class="item" value="Delete" onclick="return confirm('Are you sure you want to delete Record?')">
                 </form>

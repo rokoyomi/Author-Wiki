@@ -2,6 +2,7 @@
 
 {% block update_delete_btns %}
     <form action="{{ url_for('delete_arc', story_id=element['story_id'], id=element['id']) }}", method="post">
+        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
         <a href="{{ url_for('update_arc', story_id=element['story_id'], id=element['id']) }}" class="item">Update</a>
         <input type="submit" class="item" value="Delete" onclick="return confirm('Are you sure you want to delete Record?')">
     </form>
@@ -17,6 +18,7 @@
                 <span class="text">{{ appearance['role'] }}</span>
             </div>
             <form action="{{ url_for('delete_mtm_relation', table_name='appearance') }}" method="post">
+                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                 <input type="hidden" name="id1_name" value="character_id">
                 <input type="hidden" name="id2_name" value="arc_id">
                 <input type="hidden" name="character_id" value="{{ appearance['character_id'] }}">
@@ -29,6 +31,7 @@
         {% endfor %}
 
         <form method="post" action="{{ url_for('arc', story_id=element['story_id'], id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />        
             <input type="hidden" name="form_name" value="add_character">
             <p class="list">
                 <input type="submit" class="item" value="+ Add">
@@ -46,6 +49,7 @@
             </div>
 
             <form action="{{ url_for('delete_mtm_relation', table_name='arc_occurs_in') }}" method="post">
+                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                 <input type="hidden" name="id1_name" value="location_id">
                 <input type="hidden" name="id2_name" value="arc_id">
                 <input type="hidden" name="location_id" value="{{ location['id'] }}">
@@ -58,6 +62,7 @@
         {% endfor %}
 
         <form method="post" action="{{ url_for('arc', story_id=element['story_id'], id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             <input type="hidden" name="form_name" value="add_location">
             <p class="list">
                 <input type="submit" class="item" value="+ Add">
@@ -75,6 +80,7 @@
             </div>
 
             <form action="{{ url_for('delete_mtm_relation', table_name='item_featured_in') }}" method="post">
+                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                 <input type="hidden" name="id1_name" value="item_id">
                 <input type="hidden" name="id2_name" value="arc_id">
                 <input type="hidden" name="item_id" value="{{ item['id'] }}">
@@ -87,6 +93,7 @@
         {% endfor %}
 
         <form method="post" action="{{ url_for('arc', story_id=element['story_id'], id=element['id']) }}" class="text capitalize flex-area flex-vertical">
+            <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
             <input type="hidden" name="form_name" value="add_item">
             <p class="list">
                 <input type="submit" class="item" value="+ Add">
